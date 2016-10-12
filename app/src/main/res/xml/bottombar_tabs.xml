@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tabs>
+    <tab
+        id="@+id/tab_earthquakes"
+        icon="@drawable/ic_favorite"
+        title="Earthquakes"
+        barColorWhenSelected="#5D4037" />
+    <tab
+        id="@+id/tab_contributors"
+        icon="@drawable/ic_favorite"
+        title="Contributors"
+        barColorWhenSelected="#5D4037" />
+    <tab
+        id="@+id/tab_favorites"
+        icon="@drawable/ic_favorite"
+        title="Favorites"
+        barColorWhenSelected="#5D4037" />
+</tabs>
