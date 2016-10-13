@@ -2,7 +2,6 @@ package com.example.styczen.marcin.earthquakeapp.android.activities;
 
 import android.os.Bundle;
 import android.support.annotation.IdRes;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -14,8 +13,11 @@ import android.widget.Toast;
 import com.example.styczen.marcin.earthquakeapp.R;
 import com.example.styczen.marcin.earthquakeapp.android.fragments.AllEarthquakeFragment;
 import com.example.styczen.marcin.earthquakeapp.android.listeners.OnListFragmentInteractionListener;
+import com.example.styczen.marcin.earthquakeapp.businessLogicLayer.EarthquakeService;
+import com.example.styczen.marcin.earthquakeapp.businessLogicLayer.interfaces.IEartquakeService;
 import com.example.styczen.marcin.earthquakeapp.core.cos.Earthquake;
 import com.example.styczen.marcin.earthquakeapp.database.DBAdapter;
+import com.example.styczen.marcin.earthquakeapp.exceptions.DataBaseException;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
@@ -34,10 +36,24 @@ public class EarthquakeTabsActivity extends AppCompatActivity implements OnListF
     //TODO sortowanie
     //TODO robic pushe
     //TODO brzydki pasek u dołu
+    //TODO .gitignore
 
-    Fragment fragment;
-    private List<Earthquake> earthquakeList = new  ArrayList<>();
+
+    private AllEarthquakeFragment fragment;
+    private List<Earthquake> earthquakeList;
     private DBAdapter dbAdapter;
+    private IEartquakeService earthquakeService;
+    private BottomBar bottomBar;
+
+    public EarthquakeTabsActivity() {
+        earthquakeList = new ArrayList<>();
+        try {
+            earthquakeService = EarthquakeService.getEarthquakeService(this);
+        } catch (DataBaseException e) {
+            //TODO ErrorDialog
+            e.printStackTrace();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,58 +65,19 @@ public class EarthquakeTabsActivity extends AppCompatActivity implements OnListF
 
         boolean dataBase = createDataBase();
 
-        BottomBar bottomBar = (BottomBar) findViewById(R.id.bottom_bar);
-        bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
-            @Override
-            public void onTabSelected(@IdRes int tabId) {
-                if (tabId == R.id.tab_earthquakes) {
-                    Toast.makeText(EarthquakeTabsActivity.this, "1", Toast.LENGTH_SHORT).show();
-                    // The tab with id R.id.tab_favorites was selected,
-                    // change your content accordingly.
-                    prepareEarthquakeData1();
-                    //
-                    FragmentManager fm = getSupportFragmentManager();
-                    fragment = fm.findFragmentByTag("myFragmentTag");
-                    if (fragment == null) {
-                        FragmentTransaction ft = fm.beginTransaction();
-                        fragment = AllEarthquakeFragment.newInstance(earthquakeList);
-                        ft.add(R.id.contentContainer, fragment, "myFragmentTag");
-                        ft.commit();
-                    }
-                }
-                if (tabId == R.id.tab_contributors) {
-                    Toast.makeText(EarthquakeTabsActivity.this, "2", Toast.LENGTH_SHORT).show();
-                    // The tab with id R.id.tab_favorites was selected,
-                    // change your content accordingly.
-                    prepareEarthquakeData2();
-                    //
-                    FragmentManager fm = getSupportFragmentManager();
-                    fragment = fm.findFragmentByTag("myFragmentTag");
-                    if (fragment == null) {
-                        FragmentTransaction ft = fm.beginTransaction();
-                        fragment = AllEarthquakeFragment.newInstance(earthquakeList);
-                        ft.add(R.id.contentContainer, fragment, "myFragmentTag");
-                        ft.commit();
-                    }
-                }
-                if (tabId == R.id.tab_favorites) {
-                    Toast.makeText(EarthquakeTabsActivity.this, "3", Toast.LENGTH_SHORT).show();
-                    // The tab with id R.id.tab_favorites was selected,
-                    // change your content accordingly.
-                    prepareEarthquakeData3();
-                    //
-                    FragmentManager fm = getSupportFragmentManager();
-                    fragment = fm.findFragmentByTag("myFragmentTag");
-                    if (fragment == null) {
-                        FragmentTransaction ft = fm.beginTransaction();
-                        fragment = AllEarthquakeFragment.newInstance(earthquakeList);
-                        ft.add(R.id.contentContainer, fragment, "myFragmentTag");
-                        ft.commit();
-                    }
-                }
-            }
-        });
+        prepareEarthquakeData1();
+        //TODO refac
+        FragmentManager fm = getSupportFragmentManager();
+        fragment = (AllEarthquakeFragment) fm.findFragmentById(R.id.contentContainer);
+        if (fragment == null) {
+            FragmentTransaction ft = fm.beginTransaction();
+            fragment = AllEarthquakeFragment.newInstance(earthquakeList);
+            ft.add(R.id.contentContainer, fragment);
+            ft.commit();
+        }
 
+        //TODO onCreateView
+        bottomBar = (BottomBar) findViewById(R.id.bottom_bar);
 
         /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -116,6 +93,36 @@ public class EarthquakeTabsActivity extends AppCompatActivity implements OnListF
     @Override
     protected void onStart() {
         super.onStart();
+        bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
+            @Override
+            public void onTabSelected(@IdRes int tabId) {
+                if (tabId == R.id.tab_earthquakes) {
+                    Toast.makeText(EarthquakeTabsActivity.this, "1", Toast.LENGTH_SHORT).show();
+                    // The tab with id R.id.tab_favorites was selected,
+                    // change your content accordingly.
+                    prepareEarthquakeData1();
+                    //
+                    fragment.changeContentEarthquakeList(earthquakeList);
+
+                }
+                if (tabId == R.id.tab_contributors) {
+                    Toast.makeText(EarthquakeTabsActivity.this, "2", Toast.LENGTH_SHORT).show();
+                    // The tab with id R.id.tab_favorites was selected,
+                    // change your content accordingly.
+                    prepareEarthquakeData2();
+                    //
+                    fragment.changeContentEarthquakeList(earthquakeList);
+                }
+                if (tabId == R.id.tab_favorites) {
+                    Toast.makeText(EarthquakeTabsActivity.this, "3", Toast.LENGTH_SHORT).show();
+                    // The tab with id R.id.tab_favorites was selected,
+                    // change your content accordingly.
+                    prepareEarthquakeData3();
+                    //
+                    fragment.changeContentEarthquakeList(earthquakeList);
+                }
+            }
+        });
     }
 
     private boolean createDataBase() {
@@ -169,15 +176,13 @@ public class EarthquakeTabsActivity extends AppCompatActivity implements OnListF
     }
 
     private void prepareEarthquakeData3() {
-        earthquakeList = new ArrayList<>();
-        Earthquake earthquake = new Earthquake("Mad Max: Fury Road", "Action & Adventure", 1986.0);
-        earthquakeList.add(earthquake);
-
-        earthquake = new Earthquake("Inside Out", "Animation, Kids & Family", 1986.0);
-        earthquakeList.add(earthquake);
-
-        earthquake = new Earthquake("Star Wars: Episode VII - The Force Awakens", "Action", 1986.0);
-        earthquakeList.add(earthquake);
+        try {
+            //TODO on change
+            earthquakeList = earthquakeService.selectAll();
+        } catch (DataBaseException e) {
+            //TODO
+            e.printStackTrace();
+        }
     }
 
     @Override

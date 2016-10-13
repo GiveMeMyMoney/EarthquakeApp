@@ -38,11 +38,11 @@ public class AllEarthquakeFragment extends Fragment {
 
     private IEartquakeService earthquakeService;
 
-
     private View messageContainer;
-
+    private RecyclerView recyclerView;
 
     //region Construct
+
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -80,6 +80,7 @@ public class AllEarthquakeFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //TODO
         try {
             earthquakeService.insert(new Earthquake("E1", "12:11", 192.123));
         } catch (DataBaseException e) {
@@ -96,15 +97,13 @@ public class AllEarthquakeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_all_earthquake, container, false);
 
-        //messageContainer = rootView.findViewById(R.id.dokumenty_scan_message);
-
+        messageContainer = rootView.findViewById(R.id.add_favorites_msg);
+        setMessageContainerVisibility();
 
         // Set the adapter
         //TODO refactor
-        if (rootView instanceof RecyclerView) {
-            Context context = rootView.getContext();
-            RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.earthquake_list);
-
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.earthquake_list);
+        if (recyclerView != null) {
             LinearLayoutManager llm = new LinearLayoutManager(getActivity());
             llm.setOrientation(LinearLayoutManager.VERTICAL);
             recyclerView.setLayoutManager(llm);
@@ -114,11 +113,7 @@ public class AllEarthquakeFragment extends Fragment {
             mAdapter = new EarthquakeRecyclerViewAdapter(earthquakeList, mListener);
             recyclerView.setAdapter(new EarthquakeRecyclerViewAdapter(earthquakeList, mListener));
 
-            mAdapter.notifyDataSetChanged();
         }
-
-
-
 
         return rootView;
     }
@@ -136,12 +131,26 @@ public class AllEarthquakeFragment extends Fragment {
     }
     //endregion Construct
 
+    private boolean checkListValid(List<Earthquake> eList) {
+        return eList != null && !eList.isEmpty();
+    }
+
     private void setMessageContainerVisibility() {
-        if (earthquakeList != null && earthquakeList.size() > 0) {
+        if (checkListValid(earthquakeList)) {
             messageContainer.setVisibility(View.GONE);
         } else {
             messageContainer.setVisibility(View.VISIBLE);
         }
+    }
+
+    public void changeContentEarthquakeList(List<Earthquake> eList) {
+        if (checkListValid(eList)) {
+            this.earthquakeList = eList;
+        } else {
+            this.earthquakeList = new ArrayList<>();
+        }
+
+        recyclerView.getAdapter().notifyDataSetChanged();
     }
 
 
