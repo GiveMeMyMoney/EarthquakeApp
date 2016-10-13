@@ -4,8 +4,9 @@ import android.content.Context;
 
 import com.example.styczen.marcin.earthquakeapp.core.cos.Earthquake;
 import com.example.styczen.marcin.earthquakeapp.dataProvider.interfaces.IEarthquakeDbProvider;
-import com.example.styczen.marcin.earthquakeapp.database.DBHelper;
-import com.j256.ormlite.android.apptools.OpenHelperManager;
+import com.example.styczen.marcin.earthquakeapp.database.DBAdapter;
+import com.example.styczen.marcin.earthquakeapp.database.DaoContainer;
+import com.example.styczen.marcin.earthquakeapp.exceptions.DataBaseException;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.QueryBuilder;
 
@@ -19,28 +20,23 @@ import java.util.List;
 public class EartquakeDbProvider implements IEarthquakeDbProvider {
     private static final String LOG_TAG = EartquakeDbProvider.class.getSimpleName();
 
-    private DBHelper dataBase;
+    private DBAdapter dbAdapter;
     private Dao<Earthquake, Integer> earthquakeDao;
 
     //Construct
     private static EartquakeDbProvider instance;
 
-    private EartquakeDbProvider(Context context) /*throws DBException*/ {
+    private EartquakeDbProvider(Context context) throws DataBaseException {
         try {
-            dataBase = OpenHelperManager.getHelper(context, DBHelper.class);
-            //DaoContainer daoContainer = dataBase.getDbAdapter(context).getDaoContainer();
-            earthquakeDao = dataBase.getEarthquakeDao();
+            dbAdapter = DBAdapter.getDbAdapter(context);
+            DaoContainer daoContainer = dbAdapter.getDbAdapter(context).getDaoContainer();
+            earthquakeDao = daoContainer.getEarthquakeDAO();
         } catch (SQLException e) {
-            //TODO
-            //throw new DBException(String.format("Provider inwentaryzacji niedostępny. %s", e.getMessage()));
+            throw new DataBaseException(String.format("Eartquake Provider is inaccessible. %s", e.getMessage()));
         }
     }
 
-    public static EartquakeDbProvider getEartquakeDbProvider() /*throws DBException */ {
-        return getEartquakeDbProvider(/*getContext()*/);
-    }
-
-    public static EartquakeDbProvider getEartquakeDbProvider(Context context) /*throws DBException*/ {
+    public static EartquakeDbProvider getEartquakeDbProvider(Context context) throws DataBaseException {
         if (instance == null) {
             instance = new EartquakeDbProvider(context);
         }
@@ -48,13 +44,17 @@ public class EartquakeDbProvider implements IEarthquakeDbProvider {
     }
     //endregion Construct
 
+    private void throwError(String message) throws DataBaseException {
+        throw new DataBaseException(message);
+    }
+
     /**
      * Select all favorites earthquakes
      *
      * @return List<Earthquake>
      */
     @Override
-    public List<Earthquake> selectAll() {
+    public List<Earthquake> selectAll() throws DataBaseException {
         List<Earthquake> earthquakes = null;
         //TODO szybciej|prosciej
         try {
@@ -62,7 +62,7 @@ public class EartquakeDbProvider implements IEarthquakeDbProvider {
             qb.orderBy(Earthquake.EARTQUAKE_COL_NAME, false);
             earthquakes = qb.query();
         } catch (Exception e) {
-            //logger.error(LOG_TAG, "Błąd podczas pobierania listy arkuszy.\nException message: " + e.getMessage());
+            throwError(String.format("Eartquake Provider selectAll(). %s", e.getMessage()));
         }
 
         return earthquakes;
@@ -74,13 +74,13 @@ public class EartquakeDbProvider implements IEarthquakeDbProvider {
      * @return List<Earthquake>
      */
     @Override
-    public int deleteById(int id) {
+    public int deleteById(int id) throws DataBaseException {
         int deletedRows = 0;
 
         try {
             deletedRows = earthquakeDao.deleteById(id);
         } catch (Exception e) {
-            //logger.error(LOG_TAG, "Błąd podczas usuwania arkusza o id: " + id + "\nException message: " + e.getMessage());
+            throwError(String.format("Eartquake Provider deleteById(). %s", e.getMessage()));
         }
 
         return deletedRows;
@@ -92,13 +92,14 @@ public class EartquakeDbProvider implements IEarthquakeDbProvider {
      * @param earthquake - new earthquake when sb add
      */
     @Override
-    public boolean insert(Earthquake earthquake) {
+    public boolean insertOrUpdate(Earthquake earthquake) throws DataBaseException {
         try {
             earthquakeDao.createOrUpdate(earthquake);
         } catch (Exception e) {
-            //e.printStackTrace();
-            //throw new BladBazodanowyException(String.format("Blad podczas zapisywania arkusza %s. %s", arkuszSpisowy.getNumer(), e.getMessage() + " " + e.getCause()));
+            throwError(String.format("Eartquake Provider insertOrUpdate(). %s", e.getMessage()));
         }
         return false;
     }
+
+
 }

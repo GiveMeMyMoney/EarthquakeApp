@@ -1,9 +1,12 @@
 package com.example.styczen.marcin.earthquakeapp.businessLogicLayer;
 
+import android.content.Context;
+
 import com.example.styczen.marcin.earthquakeapp.businessLogicLayer.interfaces.IEartquakeService;
 import com.example.styczen.marcin.earthquakeapp.core.cos.Earthquake;
 import com.example.styczen.marcin.earthquakeapp.dataProvider.EartquakeDbProvider;
 import com.example.styczen.marcin.earthquakeapp.dataProvider.interfaces.IEarthquakeDbProvider;
+import com.example.styczen.marcin.earthquakeapp.exceptions.DataBaseException;
 
 import java.util.List;
 
@@ -11,28 +14,24 @@ import java.util.List;
  * Created by Marcin on 2016-10-13.
  */
 
-public class EartquakeService implements IEartquakeService {
+public class EarthquakeService implements IEartquakeService {
 
     private IEarthquakeDbProvider dataProvider;
 
     //Construct
     private static IEartquakeService earthquakeService;
 
-    private EartquakeService(IEarthquakeDbProvider dataProvider) {
+    private EarthquakeService(IEarthquakeDbProvider dataProvider) {
         this.dataProvider = dataProvider;
     }
 
-    public static IEartquakeService getEarthquakeService() /*throws ServiceException*/ {
-        return getEarthquakeService(EartquakeDbProvider.getEartquakeDbProvider());
-        /*try {
-        } catch (DBException e) {
-            throw new ServiceException();
-        }*/
+    public static IEartquakeService getEarthquakeService(Context context) throws DataBaseException {
+        return getEarthquakeService(EartquakeDbProvider.getEartquakeDbProvider(context));
     }
 
     private static IEartquakeService getEarthquakeService(IEarthquakeDbProvider dataProvider) {
         if (earthquakeService == null) {
-            earthquakeService = new EartquakeService(dataProvider);
+            earthquakeService = new EarthquakeService(dataProvider);
         }
         return earthquakeService;
     }
@@ -40,19 +39,19 @@ public class EartquakeService implements IEartquakeService {
 
 
     @Override
-    public List<Earthquake> selectAll() {
+    public List<Earthquake> selectAll() throws DataBaseException {
         return dataProvider.selectAll();
     }
 
     @Override
-    public int deleteById(int id) {
+    public int deleteById(int id) throws DataBaseException {
         return id > 0 ? dataProvider.deleteById(id) : id;
     }
 
     @Override
-    public boolean insert(Earthquake earthquake) {
+    public boolean insert(Earthquake earthquake) throws DataBaseException {
         if (earthquake != null && earthquake.isValid()) {
-            dataProvider.insert(earthquake);
+            dataProvider.insertOrUpdate(earthquake);
         }
         return false;
     }

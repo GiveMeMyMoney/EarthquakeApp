@@ -8,23 +8,26 @@ import com.j256.ormlite.table.DatabaseTable;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * Created by Marcin on 2016-10-10.
  */
 
 @AllArgsConstructor(suppressConstructorProperties = true)
+@NoArgsConstructor
 public
 @Data
 @DatabaseTable(tableName = Earthquake.EARTQUAKE_TABLE_NAME)
 class Earthquake implements Parcelable {
     public static final String EARTQUAKE_TABLE_NAME = "t_earthquake";
+    public static final String EARTQUAKE_COL_ID = "eq_id";
     public static final String EARTQUAKE_COL_NAME = "eq_name";
     public static final String EARTQUAKE_COL_TIME = "eq_time";
     public static final String EARTQUAKE_COL_MAGNITUDE = "eq_magnitude";
 
-    @DatabaseField(columnName = "_id", id = true)
-    private Long id;
+    @DatabaseField(columnName = EARTQUAKE_COL_ID, generatedId = true)
+    private int id;
     @DatabaseField(columnName = EARTQUAKE_COL_NAME)
     private String name;
     @DatabaseField(columnName = EARTQUAKE_COL_TIME)

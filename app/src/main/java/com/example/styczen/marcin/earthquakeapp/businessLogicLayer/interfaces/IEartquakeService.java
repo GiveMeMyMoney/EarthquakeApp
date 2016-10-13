@@ -1,6 +1,7 @@
 package com.example.styczen.marcin.earthquakeapp.businessLogicLayer.interfaces;
 
 import com.example.styczen.marcin.earthquakeapp.core.cos.Earthquake;
+import com.example.styczen.marcin.earthquakeapp.exceptions.DataBaseException;
 
 import java.util.List;
 
@@ -13,18 +14,18 @@ public interface IEartquakeService {
      * Select all favorites earthquakes
      * @return List<Earthquake>
      */
-    List<Earthquake> selectAll();
+    List<Earthquake> selectAll() throws DataBaseException;
 
     /**
      * Delete one earthquake from favorites
      * @return List<Earthquake>
      */
-    int deleteById(int id);
+    int deleteById(int id) throws DataBaseException;
 
     /**
      * Insert new earthquake into favorites
      * @param earthquake - new earthquake when sb add
      */
-    boolean insert(Earthquake earthquake);
+    boolean insert(Earthquake earthquake) throws DataBaseException;
 
 }

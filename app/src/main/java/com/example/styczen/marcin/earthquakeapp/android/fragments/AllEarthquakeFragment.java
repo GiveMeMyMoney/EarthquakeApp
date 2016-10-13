@@ -12,7 +12,10 @@ import android.view.ViewGroup;
 import com.example.styczen.marcin.earthquakeapp.R;
 import com.example.styczen.marcin.earthquakeapp.android.adapters.EarthquakeRecyclerViewAdapter;
 import com.example.styczen.marcin.earthquakeapp.android.listeners.OnListFragmentInteractionListener;
+import com.example.styczen.marcin.earthquakeapp.businessLogicLayer.EarthquakeService;
+import com.example.styczen.marcin.earthquakeapp.businessLogicLayer.interfaces.IEartquakeService;
 import com.example.styczen.marcin.earthquakeapp.core.cos.Earthquake;
+import com.example.styczen.marcin.earthquakeapp.exceptions.DataBaseException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,14 +36,26 @@ public class AllEarthquakeFragment extends Fragment {
     private EarthquakeRecyclerViewAdapter mAdapter;
     private OnListFragmentInteractionListener mListener;
 
+    private IEartquakeService earthquakeService;
+
+
+    private View messageContainer;
+
+
+    //region Construct
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
     public AllEarthquakeFragment() {
+        try {
+            earthquakeService = EarthquakeService.getEarthquakeService(getContext());
+        } catch (DataBaseException e) {
+            //TODO ErrorDialog
+            e.printStackTrace();
+        }
     }
 
-    // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
     public static AllEarthquakeFragment newInstance(List<Earthquake> earthquakeList) {
         AllEarthquakeFragment fragment = new AllEarthquakeFragment();
@@ -65,6 +80,12 @@ public class AllEarthquakeFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        try {
+            earthquakeService.insert(new Earthquake("E1", "12:11", 192.123));
+        } catch (DataBaseException e) {
+            e.printStackTrace();
+        }
+
         if (getArguments() != null) {
             earthquakeList = getArguments().getParcelableArrayList(ARG_EARTHQUAKE_LIST);
         }
@@ -74,6 +95,9 @@ public class AllEarthquakeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_all_earthquake, container, false);
+
+        //messageContainer = rootView.findViewById(R.id.dokumenty_scan_message);
+
 
         // Set the adapter
         //TODO refactor
@@ -90,45 +114,18 @@ public class AllEarthquakeFragment extends Fragment {
             mAdapter = new EarthquakeRecyclerViewAdapter(earthquakeList, mListener);
             recyclerView.setAdapter(new EarthquakeRecyclerViewAdapter(earthquakeList, mListener));
 
-            prepareEarthquakeData();
+            mAdapter.notifyDataSetChanged();
         }
+
+
+
+
         return rootView;
     }
 
-    private void prepareEarthquakeData() {
-        Earthquake earthquake = new Earthquake("Mad Max: Fury Road", "Action & Adventure", 1986.0);
-        earthquakeList.add(earthquake);
-
-        earthquake = new Earthquake("Inside Out", "Animation, Kids & Family", 1986.0);
-        earthquakeList.add(earthquake);
-
-        earthquake = new Earthquake("Star Wars: Episode VII - The Force Awakens", "Action", 1986.0);
-        earthquakeList.add(earthquake);
-
-        earthquake = new Earthquake("Shaun the Sheep", "Animation", 1986.0);
-        earthquakeList.add(earthquake);
-
-        earthquake = new Earthquake("The Martian", "Science Fiction & Fantasy", 1986.0);
-        earthquakeList.add(earthquake);
-
-        earthquake = new Earthquake("Mission: Impossible Rogue Nation", "Action", 1986.0);
-        earthquakeList.add(earthquake);
-
-        earthquake = new Earthquake("Up", "Animation", 1986.0);
-        earthquakeList.add(earthquake);
-
-        earthquake = new Earthquake("Star Trek", "Science Fiction", 1986.0);
-        earthquakeList.add(earthquake);
-
-        earthquake = new Earthquake("The LEGO Movie", "Animation", 1986.0);
-        earthquakeList.add(earthquake);
-
-        earthquake = new Earthquake("Iron Man", "Action & Adventure", 1986.0);
-        earthquakeList.add(earthquake);
-
-        earthquake = new Earthquake("Aliens", "Science Fiction", 1986.0);
-        earthquakeList.add(earthquake);
-
+    @Override
+    public void onStart() {
+        super.onStart();
         mAdapter.notifyDataSetChanged();
     }
 
@@ -137,4 +134,15 @@ public class AllEarthquakeFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
+    //endregion Construct
+
+    private void setMessageContainerVisibility() {
+        if (earthquakeList != null && earthquakeList.size() > 0) {
+            messageContainer.setVisibility(View.GONE);
+        } else {
+            messageContainer.setVisibility(View.VISIBLE);
+        }
+    }
+
+
 }

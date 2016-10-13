@@ -1,22 +1,21 @@
 package com.example.styczen.marcin.earthquakeapp.android.activities;
 
+import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-
-import android.support.v4.app.FragmentManager;
-import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-
 import android.widget.Toast;
 
 import com.example.styczen.marcin.earthquakeapp.R;
 import com.example.styczen.marcin.earthquakeapp.android.fragments.AllEarthquakeFragment;
 import com.example.styczen.marcin.earthquakeapp.android.listeners.OnListFragmentInteractionListener;
 import com.example.styczen.marcin.earthquakeapp.core.cos.Earthquake;
+import com.example.styczen.marcin.earthquakeapp.database.DBAdapter;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
@@ -33,20 +32,22 @@ public class EarthquakeTabsActivity extends AppCompatActivity implements OnListF
     //TODO dodac LOGI!
     //TODO Exceptions
     //TODO sortowanie
+    //TODO robic pushe
+    //TODO brzydki pasek u dołu
 
     Fragment fragment;
-    private List<Earthquake> earthquakeList = new ArrayList<>();
+    private List<Earthquake> earthquakeList = new  ArrayList<>();
+    private DBAdapter dbAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_earthquake_tabs);
 
-        boolean dataBase = createDataBase();
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        boolean dataBase = createDataBase();
 
         BottomBar bottomBar = (BottomBar) findViewById(R.id.bottom_bar);
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
@@ -112,9 +113,14 @@ public class EarthquakeTabsActivity extends AppCompatActivity implements OnListF
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
     private boolean createDataBase() {
-        //TODO
-        return false;
+        this.dbAdapter = DBAdapter.getDbAdapter(getApplicationContext());
+        return true;
     }
 
     private void prepareEarthquakeData1() {

@@ -18,7 +18,6 @@ public class DaoContainer {
     }
 
     public Dao<Earthquake, Integer> getEarthquakeDAO() throws java.sql.SQLException {
-
         if (earthquakeDAO == null) {
             earthquakeDAO = DaoManager.createDao(connectionSource, Earthquake.class);
         }
