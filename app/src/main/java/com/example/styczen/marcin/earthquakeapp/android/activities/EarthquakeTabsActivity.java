@@ -186,7 +186,6 @@ public class EarthquakeTabsActivity extends AppCompatActivity implements OnListF
 
     @Override
     public void onListFragmentInteraction(Earthquake earthquake) {
-
         Intent detailsIntent = DetailsEarthquakeActivity.getStartActivityIntent(this, earthquake);
         startActivity(detailsIntent);
     }

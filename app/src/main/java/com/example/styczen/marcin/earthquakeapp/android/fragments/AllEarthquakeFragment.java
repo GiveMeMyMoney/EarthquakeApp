@@ -137,6 +137,7 @@ public class AllEarthquakeFragment extends Fragment {
             earthquakeList = new ArrayList<>();
         }
         mAdapter.changeDataListAndNotify(earthquakeList);
+        setMessageContainerVisibility();
     }
 
 

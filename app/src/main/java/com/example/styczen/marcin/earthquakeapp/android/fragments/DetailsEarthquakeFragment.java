@@ -1,49 +1,55 @@
 package com.example.styczen.marcin.earthquakeapp.android.fragments;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.styczen.marcin.earthquakeapp.R;
+import com.example.styczen.marcin.earthquakeapp.core.cos.Earthquake;
 import com.google.android.gms.plus.PlusOneButton;
+
+import mehdi.sakout.fancybuttons.FancyButton;
 
 /**
  * A fragment with a Google +1 button.
  * Activities that contain this fragment must implement the
- * {@link PlusOneFragment.OnFragmentInteractionListener} interface
+ * {@link DetailsEarthquakeFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link PlusOneFragment#newInstance} factory method to
+ * Use the {@link DetailsEarthquakeFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PlusOneFragment extends Fragment {
+public class DetailsEarthquakeFragment extends Fragment implements View.OnClickListener {
+    private static final String ARG_EARTHQUAKE = "earthquake";
+
     // The request code must be 0 or greater.
     private static final int PLUS_ONE_REQUEST_CODE = 0;
     // The URL to +1.  Must be a valid URL.
     private final String PLUS_ONE_URL = "http://developer.android.com";
+
+    //VIEW
     private PlusOneButton mPlusOneButton;
+    private FancyButton seeMoreButton;
+
 
     private OnFragmentInteractionListener mListener;
 
-    public PlusOneFragment() {
+    private Earthquake earthquake;
+
+    public DetailsEarthquakeFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment PlusOneFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static PlusOneFragment newInstance(String param1, String param2) {
-        PlusOneFragment fragment = new PlusOneFragment();
+    public static DetailsEarthquakeFragment newInstance(Earthquake earthquake) {
+        DetailsEarthquakeFragment fragment = new DetailsEarthquakeFragment();
         Bundle args = new Bundle();
+        args.putParcelable(ARG_EARTHQUAKE, earthquake);
         fragment.setArguments(args);
         return fragment;
     }
@@ -52,17 +58,15 @@ public class PlusOneFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
+            earthquake = getArguments().getParcelable(ARG_EARTHQUAKE);
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        
-
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_plus_one, container, false);
+        View view = inflater.inflate(R.layout.fragment_details_earthquake, container, false);
 
        /* FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -74,6 +78,8 @@ public class PlusOneFragment extends Fragment {
         });*/
         //Find the +1 button
         mPlusOneButton = (PlusOneButton) view.findViewById(R.id.plus_one_button);
+        seeMoreButton = (FancyButton) view.findViewById(R.id.btn_see_more);
+        seeMoreButton.setOnClickListener(this);
 
         return view;
     }
@@ -110,19 +116,28 @@ public class PlusOneFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 
+    /*SMIECI<*/
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_see_more:
+                seeMoreDetailsBtnCLick();
+        }
+    }
+
+    private void seeMoreDetailsBtnCLick() {
+        try {
+            Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com"));
+            startActivity(myIntent);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(getContext(), "No application can handle this request."
+                    + " Please install a webbrowser",  Toast.LENGTH_LONG).show();
+            e.printStackTrace();
+        }
+    }
 }

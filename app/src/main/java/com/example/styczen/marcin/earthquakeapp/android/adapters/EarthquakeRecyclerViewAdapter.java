@@ -5,8 +5,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.amulyakhare.textdrawable.TextDrawable;
+import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.example.styczen.marcin.earthquakeapp.R;
 import com.example.styczen.marcin.earthquakeapp.android.listeners.OnListFragmentInteractionListener;
 import com.example.styczen.marcin.earthquakeapp.core.cos.Earthquake;
@@ -30,6 +33,7 @@ public class EarthquakeRecyclerViewAdapter extends RecyclerView.Adapter<Earthqua
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
+        public final ImageView mImage;
         public final TextView mName;
         public final TextView mTime;
         public final TextView mMagnitude;
@@ -38,9 +42,10 @@ public class EarthquakeRecyclerViewAdapter extends RecyclerView.Adapter<Earthqua
         public ViewHolder(View view) {
             super(view);
             mView = view;
+            mImage = (ImageView) view.findViewById(R.id.icon_iv) ;
             mName = (TextView) view.findViewById(R.id.title_tv);
             mTime = (TextView) view.findViewById(R.id.subtitle_tv);
-            mMagnitude = (TextView) view.findViewById(R.id.additional_info);
+            mMagnitude = (TextView) view.findViewById(R.id.additional_info_tv);
         }
 
         @Override
@@ -62,22 +67,32 @@ public class EarthquakeRecyclerViewAdapter extends RecyclerView.Adapter<Earthqua
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
+        //TODO ViewHolder albo cos
         holder.earthquake = earthquakeList.get(position);
-        holder.mName.setText(earthquakeList.get(position).getName());
-        holder.mTime.setText(earthquakeList.get(position).getTime());
-        holder.mMagnitude.setText(String.valueOf(earthquakeList.get(position).getMagnitude()));
+        String title = holder.earthquake.getName();
+        setImage(title, holder);
+        holder.mName.setText(title);
+        holder.mTime.setText(holder.earthquake.getTime());
+        holder.mMagnitude.setText(String.valueOf(holder.earthquake.getMagnitude()));
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (null != mListener) {
                     Log.e("Click", "lohohoho");
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
                     mListener.onListFragmentInteraction(holder.earthquake);
                 }
             }
         });
+    }
+
+    private void setImage(String title, ViewHolder holder) {
+        String firstLetter = title.charAt(0) + "";
+        ColorGenerator generator = ColorGenerator.MATERIAL;
+        int color = generator.getColor(firstLetter);
+
+        TextDrawable drawable = TextDrawable.builder().buildRound(firstLetter, color);
+        holder.mImage.setImageDrawable(drawable);
     }
 
     @Override

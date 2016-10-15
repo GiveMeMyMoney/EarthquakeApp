@@ -22,6 +22,12 @@
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
+            <fragment
+                android:id="@+id/map_google"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
@@ -34,15 +40,6 @@
 
     <include layout="@layout/content_details_earthquake"/>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/fab_margin"
-        app:layout_anchor="@id/app_bar"
-        app:layout_anchorGravity="bottom|end"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
-
     <com.getbase.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_favorites"
         android:layout_width="wrap_content"
@@ -50,5 +47,13 @@
         android:layout_gravity="end|bottom"
         android:layout_margin="@dimen/fab_margin"
         app:fab_icon="@android:drawable/ic_dialog_email" />
+
+    <!--<android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fab_margin"
+        app:layout_anchor="@+id/app_bar"
+        app:srcCompat="@android:drawable/ic_dialog_email" />-->
 
 </android.support.design.widget.CoordinatorLayout>
