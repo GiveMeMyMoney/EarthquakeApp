@@ -18,7 +18,7 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <!--BottomBar-->
-    <style name="AppTheme.TransNav" parent="AppTheme" >
+    <style name="AppTheme.TransNav" parent="AppTheme">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
@@ -29,7 +29,6 @@
         <item name="android:layout_margin">5dp</item>
         <item name="android:layout_marginBottom">10dp</item>
     </style>
-
 
 
 </resources>

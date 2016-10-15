@@ -7,7 +7,8 @@ package com.example.styczen.marcin.earthquakeapp.utils;
 public class AndroidUtils {
 
     public static final String getStoragePath() {
-        String storagePath = "mnt/sdcard";
+        //TODO
+        String storagePath = "/sdcard";
         /*if (Environment.getExternalStorageState().equals("mounted")) {
             storagePath = Environment.getExternalStorageDirectory().toString();
         }*/

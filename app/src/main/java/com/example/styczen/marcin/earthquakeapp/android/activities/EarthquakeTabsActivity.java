@@ -1,5 +1,6 @@
 package com.example.styczen.marcin.earthquakeapp.android.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v4.app.FragmentManager;
@@ -37,7 +38,6 @@ public class EarthquakeTabsActivity extends AppCompatActivity implements OnListF
     //TODO robic pushe
     //TODO brzydki pasek u dołu
     //TODO .gitignore
-
 
     private AllEarthquakeFragment fragment;
     private List<Earthquake> earthquakeList;
@@ -103,7 +103,6 @@ public class EarthquakeTabsActivity extends AppCompatActivity implements OnListF
                     prepareEarthquakeData1();
                     //
                     fragment.changeContentEarthquakeList(earthquakeList);
-
                 }
                 if (tabId == R.id.tab_contributors) {
                     Toast.makeText(EarthquakeTabsActivity.this, "2", Toast.LENGTH_SHORT).show();
@@ -187,7 +186,9 @@ public class EarthquakeTabsActivity extends AppCompatActivity implements OnListF
 
     @Override
     public void onListFragmentInteraction(Earthquake earthquake) {
-        Toast.makeText(this, "CLIKKKKKKK", Toast.LENGTH_SHORT).show();
+
+        Intent detailsIntent = DetailsEarthquakeActivity.getStartActivityIntent(this, earthquake);
+        startActivity(detailsIntent);
     }
 
     @Override

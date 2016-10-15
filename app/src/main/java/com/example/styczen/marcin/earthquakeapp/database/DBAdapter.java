@@ -53,7 +53,7 @@ public class DBAdapter {
 
     private String setDbPath() {
         return AndroidUtils.getStoragePath()
-                + File.separator + "InSpace" + File.separator
+                + File.separator + "EarthquakeMobile" + File.separator
                 + DATABASE_NAME;
     }
     //endregion Construct

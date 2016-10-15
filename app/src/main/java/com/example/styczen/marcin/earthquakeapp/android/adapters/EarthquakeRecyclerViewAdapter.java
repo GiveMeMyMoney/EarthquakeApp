@@ -11,6 +11,7 @@ import com.example.styczen.marcin.earthquakeapp.R;
 import com.example.styczen.marcin.earthquakeapp.android.listeners.OnListFragmentInteractionListener;
 import com.example.styczen.marcin.earthquakeapp.core.cos.Earthquake;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -49,7 +50,7 @@ public class EarthquakeRecyclerViewAdapter extends RecyclerView.Adapter<Earthqua
     }
 
     public EarthquakeRecyclerViewAdapter(List<Earthquake> items, OnListFragmentInteractionListener listener) {
-        earthquakeList = items;
+        earthquakeList = new ArrayList<>(items);
         mListener = listener;
     }
 
@@ -82,6 +83,12 @@ public class EarthquakeRecyclerViewAdapter extends RecyclerView.Adapter<Earthqua
     @Override
     public int getItemCount() {
         return (earthquakeList != null) ? earthquakeList.size() : 0;
+    }
+
+    public void changeDataListAndNotify(List<Earthquake> eList) {
+        earthquakeList.clear();
+        earthquakeList.addAll(eList);
+        this.notifyDataSetChanged();
     }
 
 

@@ -20,6 +20,8 @@ import com.example.styczen.marcin.earthquakeapp.exceptions.DataBaseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.styczen.marcin.earthquakeapp.utils.Utils.checkListValid;
+
 /**
  * Created by Marcin on 2016-10-13.
  */
@@ -79,14 +81,6 @@ public class AllEarthquakeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        //TODO
-        try {
-            earthquakeService.insert(new Earthquake("E1", "12:11", 192.123));
-        } catch (DataBaseException e) {
-            e.printStackTrace();
-        }
-
         if (getArguments() != null) {
             earthquakeList = getArguments().getParcelableArrayList(ARG_EARTHQUAKE_LIST);
         }
@@ -107,12 +101,10 @@ public class AllEarthquakeFragment extends Fragment {
             LinearLayoutManager llm = new LinearLayoutManager(getActivity());
             llm.setOrientation(LinearLayoutManager.VERTICAL);
             recyclerView.setLayoutManager(llm);
-
             recyclerView.setHasFixedSize(true);
 
             mAdapter = new EarthquakeRecyclerViewAdapter(earthquakeList, mListener);
-            recyclerView.setAdapter(new EarthquakeRecyclerViewAdapter(earthquakeList, mListener));
-
+            recyclerView.setAdapter(mAdapter);
         }
 
         return rootView;
@@ -130,11 +122,6 @@ public class AllEarthquakeFragment extends Fragment {
         mListener = null;
     }
     //endregion Construct
-
-    private boolean checkListValid(List<Earthquake> eList) {
-        return eList != null && !eList.isEmpty();
-    }
-
     private void setMessageContainerVisibility() {
         if (checkListValid(earthquakeList)) {
             messageContainer.setVisibility(View.GONE);
@@ -145,12 +132,11 @@ public class AllEarthquakeFragment extends Fragment {
 
     public void changeContentEarthquakeList(List<Earthquake> eList) {
         if (checkListValid(eList)) {
-            this.earthquakeList = eList;
+            earthquakeList = eList;
         } else {
-            this.earthquakeList = new ArrayList<>();
+            earthquakeList = new ArrayList<>();
         }
-
-        recyclerView.getAdapter().notifyDataSetChanged();
+        mAdapter.changeDataListAndNotify(earthquakeList);
     }
 
 
