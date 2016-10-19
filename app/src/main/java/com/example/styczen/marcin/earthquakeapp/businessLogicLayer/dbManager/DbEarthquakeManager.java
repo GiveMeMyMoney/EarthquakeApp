@@ -1,11 +1,11 @@
-package com.example.styczen.marcin.earthquakeapp.businessLogicLayer;
+package com.example.styczen.marcin.earthquakeapp.businessLogicLayer.dbManager;
 
 import android.content.Context;
 
-import com.example.styczen.marcin.earthquakeapp.businessLogicLayer.interfaces.IEartquakeService;
+import com.example.styczen.marcin.earthquakeapp.businessLogicLayer.dbManager.interfaces.IDbEarthquakeManager;
 import com.example.styczen.marcin.earthquakeapp.core.cos.Earthquake;
-import com.example.styczen.marcin.earthquakeapp.dataProvider.EartquakeDbProvider;
-import com.example.styczen.marcin.earthquakeapp.dataProvider.interfaces.IEarthquakeDbProvider;
+import com.example.styczen.marcin.earthquakeapp.dataProvider.dbProvider.EartquakeDbProvider;
+import com.example.styczen.marcin.earthquakeapp.dataProvider.dbProvider.interfaces.IEarthquakeDbProvider;
 import com.example.styczen.marcin.earthquakeapp.exceptions.DataBaseException;
 
 import java.util.List;
@@ -14,29 +14,28 @@ import java.util.List;
  * Created by Marcin on 2016-10-13.
  */
 
-public class EarthquakeService implements IEartquakeService {
+public class DbEarthquakeManager implements IDbEarthquakeManager {
 
     private IEarthquakeDbProvider dataProvider;
 
     //Construct
-    private static IEartquakeService earthquakeService;
+    private static IDbEarthquakeManager earthquakeService;
 
-    private EarthquakeService(IEarthquakeDbProvider dataProvider) {
+    private DbEarthquakeManager(IEarthquakeDbProvider dataProvider) {
         this.dataProvider = dataProvider;
     }
 
-    public static IEartquakeService getEarthquakeService(Context context) throws DataBaseException {
+    public static IDbEarthquakeManager getEarthquakeService(Context context) throws DataBaseException {
         return getEarthquakeService(EartquakeDbProvider.getEartquakeDbProvider(context));
     }
 
-    private static IEartquakeService getEarthquakeService(IEarthquakeDbProvider dataProvider) {
+    private static IDbEarthquakeManager getEarthquakeService(IEarthquakeDbProvider dataProvider) {
         if (earthquakeService == null) {
-            earthquakeService = new EarthquakeService(dataProvider);
+            earthquakeService = new DbEarthquakeManager(dataProvider);
         }
         return earthquakeService;
     }
     //endregion Construct
-
 
     @Override
     public List<Earthquake> selectAll() throws DataBaseException {

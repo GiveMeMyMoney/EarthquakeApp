@@ -1,4 +1,4 @@
-package com.example.styczen.marcin.earthquakeapp.businessLogicLayer.interfaces;
+package com.example.styczen.marcin.earthquakeapp.businessLogicLayer.dbManager.interfaces;
 
 import com.example.styczen.marcin.earthquakeapp.core.cos.Earthquake;
 import com.example.styczen.marcin.earthquakeapp.exceptions.DataBaseException;
@@ -9,7 +9,7 @@ import java.util.List;
  * Created by Marcin on 2016-10-13.
  */
 
-public interface IEartquakeService {
+public interface IDbEarthquakeManager {
     /**
      * Select all favorites earthquakes
      * @return List<Earthquake>

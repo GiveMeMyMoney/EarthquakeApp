@@ -1,4 +1,4 @@
-package com.example.styczen.marcin.earthquakeapp.dataProvider.interfaces;
+package com.example.styczen.marcin.earthquakeapp.dataProvider.dbProvider.interfaces;
 
 import com.example.styczen.marcin.earthquakeapp.core.cos.Earthquake;
 import com.example.styczen.marcin.earthquakeapp.exceptions.DataBaseException;

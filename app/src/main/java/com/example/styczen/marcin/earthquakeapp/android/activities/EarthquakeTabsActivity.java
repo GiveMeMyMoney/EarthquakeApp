@@ -9,13 +9,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.example.styczen.marcin.earthquakeapp.R;
 import com.example.styczen.marcin.earthquakeapp.android.fragments.AllEarthquakeFragment;
 import com.example.styczen.marcin.earthquakeapp.android.listeners.OnListFragmentInteractionListener;
-import com.example.styczen.marcin.earthquakeapp.businessLogicLayer.EarthquakeService;
-import com.example.styczen.marcin.earthquakeapp.businessLogicLayer.interfaces.IEartquakeService;
+import com.example.styczen.marcin.earthquakeapp.businessLogicLayer.dbManager.DbEarthquakeManager;
+import com.example.styczen.marcin.earthquakeapp.businessLogicLayer.dbManager.interfaces.IDbEarthquakeManager;
 import com.example.styczen.marcin.earthquakeapp.core.cos.Earthquake;
 import com.example.styczen.marcin.earthquakeapp.database.DBAdapter;
 import com.example.styczen.marcin.earthquakeapp.exceptions.DataBaseException;
@@ -30,6 +29,7 @@ import java.util.List;
  */
 
 public class EarthquakeTabsActivity extends AppCompatActivity implements OnListFragmentInteractionListener {
+    private static final String LOG_TAG = EarthquakeTabsActivity.class.getSimpleName();
     //TODO res/layout-sw600dp
     //TODO dla LAND mniejszy bottombar
     //TODO dodac LOGI!
@@ -37,18 +37,21 @@ public class EarthquakeTabsActivity extends AppCompatActivity implements OnListF
     //TODO sortowanie
     //TODO robic pushe
     //TODO brzydki pasek u dołu
-    //TODO .gitignore
+    //TODO paczki services, receivers...
+    //// TODO: 2016-10-18 koleczko ktore sie krenci :D - loader (ProgressBar)
 
     private AllEarthquakeFragment fragment;
     private List<Earthquake> earthquakeList;
     private DBAdapter dbAdapter;
-    private IEartquakeService earthquakeService;
+    private IDbEarthquakeManager earthquakeManager;
     private BottomBar bottomBar;
+    //private EarthquakeDownloadReceiver earthquakeDownloadReceiver;
 
     public EarthquakeTabsActivity() {
         earthquakeList = new ArrayList<>();
         try {
-            earthquakeService = EarthquakeService.getEarthquakeService(this);
+            earthquakeManager = DbEarthquakeManager.getEarthquakeService(this);
+            //earthquakeDownloadReceiver = new EarthquakeDownloadReceiver();
         } catch (DataBaseException e) {
             //TODO ErrorDialog
             e.printStackTrace();
@@ -87,7 +90,6 @@ public class EarthquakeTabsActivity extends AppCompatActivity implements OnListF
                         .setAction("Action", null).show();
             }
         });*/
-
     }
 
     @Override
@@ -97,31 +99,34 @@ public class EarthquakeTabsActivity extends AppCompatActivity implements OnListF
             @Override
             public void onTabSelected(@IdRes int tabId) {
                 if (tabId == R.id.tab_earthquakes) {
-                    Toast.makeText(EarthquakeTabsActivity.this, "1", Toast.LENGTH_SHORT).show();
-                    // The tab with id R.id.tab_favorites was selected,
-                    // change your content accordingly.
                     prepareEarthquakeData1();
                     //
                     fragment.changeContentEarthquakeList(earthquakeList);
                 }
                 if (tabId == R.id.tab_contributors) {
-                    Toast.makeText(EarthquakeTabsActivity.this, "2", Toast.LENGTH_SHORT).show();
-                    // The tab with id R.id.tab_favorites was selected,
-                    // change your content accordingly.
                     prepareEarthquakeData2();
                     //
                     fragment.changeContentEarthquakeList(earthquakeList);
                 }
                 if (tabId == R.id.tab_favorites) {
-                    Toast.makeText(EarthquakeTabsActivity.this, "3", Toast.LENGTH_SHORT).show();
-                    // The tab with id R.id.tab_favorites was selected,
-                    // change your content accordingly.
                     prepareEarthquakeData3();
                     //
                     fragment.changeContentEarthquakeList(earthquakeList);
                 }
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //registerReceiver(earthquakeDownloadReceiver, new IntentFilter(EarthquakeDownloadService.NOTIFICATION));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //unregisterReceiver(earthquakeDownloadReceiver);
     }
 
     private boolean createDataBase() {
@@ -177,13 +182,17 @@ public class EarthquakeTabsActivity extends AppCompatActivity implements OnListF
     private void prepareEarthquakeData3() {
         try {
             //TODO on change
-            earthquakeList = earthquakeService.selectAll();
+            earthquakeList = earthquakeManager.selectAll();
         } catch (DataBaseException e) {
             //TODO
             e.printStackTrace();
         }
     }
 
+    /**
+     * After click on card_list with earthquake
+     * @param earthquake
+     */
     @Override
     public void onListFragmentInteraction(Earthquake earthquake) {
         Intent detailsIntent = DetailsEarthquakeActivity.getStartActivityIntent(this, earthquake);
@@ -199,16 +208,11 @@ public class EarthquakeTabsActivity extends AppCompatActivity implements OnListF
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                //doService();
+                return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 

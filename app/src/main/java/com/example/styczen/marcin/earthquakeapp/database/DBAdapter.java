@@ -22,6 +22,7 @@ import java.sql.SQLException;
  * Database class
  */
 
+//TODO refactor
 public class DBAdapter {
     private static String LOG_TAG = DBAdapter.class.getSimpleName();
 
@@ -111,18 +112,6 @@ public class DBAdapter {
                 Log.e(LOG_TAG, "Can't drop databases (onUpgrade)", e);
                 throw new RuntimeException(e);
             }
-        }
-
-        /**
-         * @return EarthquakeDao
-         * @throws SQLException
-         */
-        public Dao<Earthquake, Integer> getEarthquakeDao() throws SQLException {
-            Log.i(LOG_TAG, "getEarthquakeDao");
-            if (earthquakeDao == null) {
-                earthquakeDao = getDao(Earthquake.class);
-            }
-            return earthquakeDao;
         }
 
         /**
