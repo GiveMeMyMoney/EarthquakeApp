@@ -97,7 +97,7 @@ public class DetailsEarthquakeActivity extends AppCompatActivity implements OnMa
                     scrollRange = appBarLayout.getTotalScrollRange();
                 }
                 if (scrollRange + verticalOffset == 0) {
-                    getSupportActionBar().setTitle(earthquake.getName());
+                    getSupportActionBar().setTitle(earthquake.getTitle());
                     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                     isShow = true;
                 } else if (isShow) {

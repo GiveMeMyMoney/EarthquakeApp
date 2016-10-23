@@ -69,8 +69,8 @@ public class AllEarthquakeFragment extends Fragment {
         try {
             earthquakeDownloadReceiver = new EarthquakeDownloadReceiver() {
                 @Override
-                protected void onReceiveSend(String JSON) {
-                    Toast.makeText(getContext(), JSON.toString(), Toast.LENGTH_LONG).show();
+                protected void onReceiveSend(List<Earthquake> earthquakeList) {
+                    Toast.makeText(getContext(), earthquakeList.toString(), Toast.LENGTH_LONG).show();
 
                     swipeRefreshLayout.setRefreshing(false);
                 }

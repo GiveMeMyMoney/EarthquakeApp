@@ -69,7 +69,7 @@ public class EarthquakeRecyclerViewAdapter extends RecyclerView.Adapter<Earthqua
     public void onBindViewHolder(final ViewHolder holder, int position) {
         //TODO ViewHolder albo cos
         holder.earthquake = earthquakeList.get(position);
-        String title = holder.earthquake.getName();
+        String title = holder.earthquake.getTitle();
         setImage(title, holder);
         holder.mName.setText(title);
         holder.mTime.setText(holder.earthquake.getTime());

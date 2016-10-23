@@ -117,7 +117,7 @@ public class DetailsEarthquakeFragment extends Fragment implements View.OnClickL
     }
 
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
+        // TODO: Update argument type and title
         void onFragmentInteraction(Uri uri);
     }
 

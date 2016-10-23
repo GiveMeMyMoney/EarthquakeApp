@@ -29,22 +29,22 @@ class Earthquake implements Parcelable {
     @DatabaseField(columnName = EARTQUAKE_COL_ID, generatedId = true)
     private int id;
     @DatabaseField(columnName = EARTQUAKE_COL_NAME)
-    private String name;
+    private String title;
     @DatabaseField(columnName = EARTQUAKE_COL_TIME)
     private String time;
     @DatabaseField(columnName = EARTQUAKE_COL_MAGNITUDE)
     private Double magnitude;
 
     //TODO lombok
-    public Earthquake(String name, String time, Double magnitude) {
-        this.name = name;
+    public Earthquake(String title, String time, Double magnitude) {
+        this.title = title;
         this.time = time;
         this.magnitude = magnitude;
     }
 
     //PARCEL - lombok nie obsluguje przynajmnij nic o tym nie wiem.
     public Earthquake(Parcel in) {
-        this.name = in.readString();
+        this.title = in.readString();
         this.time = in.readString();
         this.magnitude = (Double) in.readValue(Double.class.getClassLoader());
     }
@@ -56,7 +56,7 @@ class Earthquake implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.name);
+        dest.writeString(this.title);
         dest.writeString(this.time);
         dest.writeValue(this.magnitude);
     }
@@ -74,7 +74,7 @@ class Earthquake implements Parcelable {
     };
 
     public boolean isValid() {
-        return !(name == null || time == null || magnitude == null);
+        return !(title == null || time == null || magnitude == null);
     }
 
 }
