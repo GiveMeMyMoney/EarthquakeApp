@@ -73,7 +73,7 @@ public class DetailsEarthquakeActivity extends AppCompatActivity implements OnMa
         AppBarLayout mAppBarLayout = (AppBarLayout) findViewById(R.id.app_bar);
 
         //TODO refactor
-        //Drag na mapce - by przesuwac mapke
+        //Drag on map
         CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) mAppBarLayout.getLayoutParams();
         AppBarLayout.Behavior behavior = new AppBarLayout.Behavior();
         behavior.setDragCallback(new AppBarLayout.Behavior.DragCallback() {
@@ -86,7 +86,7 @@ public class DetailsEarthquakeActivity extends AppCompatActivity implements OnMa
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //chowanie tytulu gdy expanded
+        //Hide title when expanded
         mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             boolean isShow = true;
             int scrollRange = -1;

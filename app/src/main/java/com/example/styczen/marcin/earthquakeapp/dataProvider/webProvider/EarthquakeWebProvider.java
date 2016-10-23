@@ -1,11 +1,9 @@
 package com.example.styczen.marcin.earthquakeapp.dataProvider.webProvider;
 
-import com.example.styczen.marcin.earthquakeapp.core.cos.Earthquake;
 import com.j256.ormlite.logger.Logger;
 import com.j256.ormlite.logger.LoggerFactory;
 
-import java.util.List;
-
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -44,7 +42,7 @@ public class EarthquakeWebProvider {
 
     public interface RetroEarthquakesWithDate {
         @GET("fdsnws/event/1/query")
-        Call<List<Earthquake>> getEarthquakesWithDate(@Query("format") String format, @Query("starttime") String starttime, @Query("endtime") String endtime);
+        Call<ResponseBody> getEarthquakesWithDate(@Query("format") String format, @Query("starttime") String starttime, @Query("endtime") String endtime);
     }
 
     public static RetroEarthquakesWithDate downloadEarthquakesWithDate() {
