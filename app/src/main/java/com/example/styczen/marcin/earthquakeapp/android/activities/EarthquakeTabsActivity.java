@@ -67,7 +67,6 @@ public class EarthquakeTabsActivity extends AppCompatActivity implements OnListF
 
         boolean dataBase = createDataBase();
 
-        prepareEarthquakeData1();
         //TODO refac
         FragmentManager fm = getSupportFragmentManager();
         fragment = (AllEarthquakeFragment) fm.findFragmentById(R.id.contentContainer);
@@ -98,17 +97,17 @@ public class EarthquakeTabsActivity extends AppCompatActivity implements OnListF
             @Override
             public void onTabSelected(@IdRes int tabId) {
                 if (tabId == R.id.tab_earthquakes) {
-                    prepareEarthquakeData1();
+                    //prepareEarthquakeData1();
                     //
-                    fragment.changeContentEarthquakeList(earthquakeList);
+                    //fragment.changeContentEarthquakeList(earthquakeList);
                 }
                 if (tabId == R.id.tab_contributors) {
-                    prepareEarthquakeData2();
+                    //prepareEarthquakeData2();
                     //
-                    fragment.changeContentEarthquakeList(earthquakeList);
+                    //fragment.changeContentEarthquakeList(earthquakeList);
                 }
                 if (tabId == R.id.tab_favorites) {
-                    prepareEarthquakeData3();
+                    getFavoriteEarthquakesFromDB();
                     //
                     fragment.changeContentEarthquakeList(earthquakeList);
                 }
@@ -133,7 +132,7 @@ public class EarthquakeTabsActivity extends AppCompatActivity implements OnListF
         return true;
     }
 
-    private void prepareEarthquakeData1() {
+    /*private void prepareEarthquakeData1() {
         earthquakeList = new ArrayList<>();
         Earthquake earthquake = new Earthquake("Mad Max: Fury Road", "Action & Adventure", 1986.0);
         earthquakeList.add(earthquake);
@@ -176,9 +175,9 @@ public class EarthquakeTabsActivity extends AppCompatActivity implements OnListF
 
         earthquake = new Earthquake("Inside Out", "Animation, Kids & Family", 1986.0);
         earthquakeList.add(earthquake);
-    }
+    }*/
 
-    private void prepareEarthquakeData3() {
+    private void getFavoriteEarthquakesFromDB() {
         try {
             //TODO on change
             earthquakeList = earthquakeManager.selectAll();

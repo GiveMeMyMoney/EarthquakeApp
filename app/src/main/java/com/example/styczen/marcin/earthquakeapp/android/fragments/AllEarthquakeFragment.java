@@ -43,7 +43,7 @@ public class AllEarthquakeFragment extends Fragment {
     private static final String LOG_TAG = AllEarthquakeFragment.class.getSimpleName();
 
     private static final String ARG_EARTHQUAKE_LIST = "earthquake-list";
-    private List<Earthquake> earthquakeList = new ArrayList<>();
+    private List<Earthquake> earthquakeList;
     private EarthquakeRecyclerViewAdapter mAdapter;
     private OnListFragmentInteractionListener mListener;
 
@@ -60,16 +60,19 @@ public class AllEarthquakeFragment extends Fragment {
 
     //region Construct
 
+
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
     public AllEarthquakeFragment() {
+        earthquakeList = new ArrayList<>();
         try {
             earthquakeDownloadReceiver = new EarthquakeDownloadReceiver() {
                 @Override
-                protected void onReceiveSend(List<Earthquake> earthquakeList) {
+                protected void onReceiveSend(List<Earthquake> earthquakeListFromAPI) {
                     //Toast.makeText(getContext(), earthquakeList.toString(), Toast.LENGTH_LONG).show();
+                    earthquakeList = earthquakeListFromAPI;
                     changeContentEarthquakeList(earthquakeList);
 
                     swipeRefreshLayout.setRefreshing(false);
@@ -115,11 +118,11 @@ public class AllEarthquakeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_all_earthquake, container, false);
 
-        swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh_layout);
-        setSwipeRefreshLayout();
-
         messageContainer = rootView.findViewById(R.id.add_favorites_msg);
         setMessageContainerVisibility();
+
+        swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh_layout);
+        setSwipeRefreshLayout();
 
         // Set the adapter
         //TODO refactor
@@ -138,20 +141,29 @@ public class AllEarthquakeFragment extends Fragment {
 
     private void setSwipeRefreshLayout() {
         swipeRefreshLayout.setColorSchemeColors(Color.BLUE, Color.RED, Color.GREEN, Color.BLACK);
-
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 Log.d(LOG_TAG, "swipeRefreshLayout: onRefresh");
-                doService();
+                messageContainer.setVisibility(View.GONE);
+                getEarthquakesFromAPIByService();
+            }
+        });
+
+        //first time run
+        swipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                messageContainer.setVisibility(View.GONE);
+                swipeRefreshLayout.setRefreshing(true);
+                getEarthquakesFromAPIByService();
             }
         });
     }
 
-    private void doService() {
+    private void getEarthquakesFromAPIByService() {
         Intent i = new Intent(getContext(), EarthquakeDownloadService.class);
         getContext().startService(i);
-        Log.e(LOG_TAG, "start Service ------------------------------------------");
     }
 
     @Override
@@ -170,6 +182,7 @@ public class AllEarthquakeFragment extends Fragment {
     public void onResume() {
         super.onResume();
         getContext().registerReceiver(earthquakeDownloadReceiver, new IntentFilter(EarthquakeDownloadService.NOTIFICATION));
+        changeContentEarthquakeList(earthquakeList);
     }
 
     @Override
@@ -177,6 +190,7 @@ public class AllEarthquakeFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
+
     //endregion Construct
     private void setMessageContainerVisibility() {
         if (checkListValid(earthquakeList)) {

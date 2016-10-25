@@ -76,7 +76,7 @@ public class DetailsEarthquakeFragment extends Fragment implements View.OnClickL
                         .setAction("Action", null).show();
             }
         });*/
-        //Find the +1 button
+
         mPlusOneButton = (PlusOneButton) view.findViewById(R.id.plus_one_button);
         seeMoreButton = (FancyButton) view.findViewById(R.id.btn_see_more);
         seeMoreButton.setOnClickListener(this);
