@@ -1,6 +1,6 @@
 package com.example.styczen.marcin.earthquakeapp.database;
 
-import com.example.styczen.marcin.earthquakeapp.core.cos.Earthquake;
+import com.example.styczen.marcin.earthquakeapp.core.Earthquake;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.support.ConnectionSource;

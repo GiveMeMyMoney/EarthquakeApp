@@ -17,7 +17,7 @@ import android.view.View;
 
 import com.example.styczen.marcin.earthquakeapp.R;
 import com.example.styczen.marcin.earthquakeapp.android.fragments.DetailsEarthquakeFragment;
-import com.example.styczen.marcin.earthquakeapp.core.cos.Earthquake;
+import com.example.styczen.marcin.earthquakeapp.core.Earthquake;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;

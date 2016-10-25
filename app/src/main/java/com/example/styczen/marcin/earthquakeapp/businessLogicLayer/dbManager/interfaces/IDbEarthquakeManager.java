@@ -1,6 +1,6 @@
 package com.example.styczen.marcin.earthquakeapp.businessLogicLayer.dbManager.interfaces;
 
-import com.example.styczen.marcin.earthquakeapp.core.cos.Earthquake;
+import com.example.styczen.marcin.earthquakeapp.core.Earthquake;
 import com.example.styczen.marcin.earthquakeapp.exceptions.DataBaseException;
 
 import java.util.List;

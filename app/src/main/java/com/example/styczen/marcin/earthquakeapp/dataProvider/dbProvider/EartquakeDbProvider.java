@@ -2,7 +2,7 @@ package com.example.styczen.marcin.earthquakeapp.dataProvider.dbProvider;
 
 import android.content.Context;
 
-import com.example.styczen.marcin.earthquakeapp.core.cos.Earthquake;
+import com.example.styczen.marcin.earthquakeapp.core.Earthquake;
 import com.example.styczen.marcin.earthquakeapp.dataProvider.dbProvider.interfaces.IEarthquakeDbProvider;
 import com.example.styczen.marcin.earthquakeapp.database.DBAdapter;
 import com.example.styczen.marcin.earthquakeapp.database.DaoContainer;

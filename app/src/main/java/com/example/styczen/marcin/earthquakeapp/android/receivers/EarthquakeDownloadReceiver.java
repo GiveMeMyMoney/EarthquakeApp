@@ -8,7 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.example.styczen.marcin.earthquakeapp.android.services.EarthquakeDownloadService;
-import com.example.styczen.marcin.earthquakeapp.core.cos.Earthquake;
+import com.example.styczen.marcin.earthquakeapp.core.Earthquake;
 
 import java.util.List;
 

@@ -1,6 +1,6 @@
 package com.example.styczen.marcin.earthquakeapp.businessLogicLayer.webManager.interfaces;
 
-import com.example.styczen.marcin.earthquakeapp.core.cos.Earthquake;
+import com.example.styczen.marcin.earthquakeapp.core.Earthquake;
 
 import java.util.List;
 

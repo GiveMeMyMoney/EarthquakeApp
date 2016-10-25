@@ -38,9 +38,15 @@ public class EarthquakeWebProvider {
     }
     //endregion Construct
 
-    //http://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2014-01-01&endtime=2014-01-02
-
     public interface RetroEarthquakesWithDate {
+        /**
+         *  Download all eartquakes with match (starttime; endtime)
+         *
+         * @param format - format like geojson or XML
+         * @param starttime - from
+         * @param endtime - to
+         * @return - ResponseBody which is a JSON.
+         */
         @GET("fdsnws/event/1/query")
         Call<ResponseBody> getEarthquakesWithDate(@Query("format") String format, @Query("starttime") String starttime, @Query("endtime") String endtime);
     }

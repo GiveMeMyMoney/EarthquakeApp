@@ -3,16 +3,16 @@ package com.example.styczen.marcin.earthquakeapp.businessLogicLayer.webManager;
 import android.util.Log;
 
 import com.example.styczen.marcin.earthquakeapp.businessLogicLayer.webManager.interfaces.IWebEarthquakeManager;
-import com.example.styczen.marcin.earthquakeapp.core.cos.Earthquake;
+import com.example.styczen.marcin.earthquakeapp.core.Earthquake;
 import com.example.styczen.marcin.earthquakeapp.dataProvider.webProvider.EarthquakeWebProvider;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -63,15 +63,22 @@ public class WebEarthquakeManager implements IWebEarthquakeManager {
         return null;
     }
 
+    /**
+     * Get JSON and parse it to List<Earthquake>.
+     * Format of JSON(geojson): http://earthquake.usgs.gov/earthquakes/feed/v1.0/geojson.php
+     *
+     * @param JSON
+     * @return List<Earthquake>
+     */
     private List<Earthquake> parseJsonToEarthquakes(String JSON) {
         List<Earthquake> earthquakeList = new ArrayList<>();
-        JSONObject obj, obj2, obj3;
+        /*JSONObject obj, obj2, obj3;
         try {
             obj = new JSONObject(JSON);
 
             JSONArray arr = obj.getJSONArray("features");
             String title = "";
-            for (int i = 0; i < /*arr.length()*/ 1; i++) {
+            for (int i = 0; i < *//*arr.length()*//* 1; i++) {
                 obj2 = arr.getJSONObject(i);
                 obj3 = obj2.getJSONObject("properties");
 
@@ -79,12 +86,39 @@ public class WebEarthquakeManager implements IWebEarthquakeManager {
 
             }
 
+
+
+
+
             //earthquakeList.add(new Earthquake(null, title, null, null));
         } catch (JSONException e) {
             e.printStackTrace();
+        }*/
+
+        Map<String, Object> javaRootMapObject = new Gson().fromJson(JSON, Map.class);
+
+        JsonObject obj = new Gson().fromJson(JSON, JsonObject.class);
+        JsonArray featuresArray = obj.getAsJsonArray("features"); //"features"
+
+
+        for (int i = 0; i < 1; i++) {
+            JsonObject objProperties = featuresArray.get(i).getAsJsonObject().getAsJsonObject("properties");
+            String place = objProperties.get("place").getAsString();
         }
+
+        /*for (JsonElement jsonElement : featuresArray) {
+            JsonObject objProperties = jsonElement.getAsJsonObject().getAsJsonObject("properties");
+            String place = objProperties.get("place").getAsString();
+
+
+        }*/
+
         return earthquakeList;
     }
 
+    private Earthquake getEarthquake() {
+
+        return null;
+    }
 
 }

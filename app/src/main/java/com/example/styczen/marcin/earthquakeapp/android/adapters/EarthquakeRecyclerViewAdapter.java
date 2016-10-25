@@ -12,7 +12,7 @@ import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.example.styczen.marcin.earthquakeapp.R;
 import com.example.styczen.marcin.earthquakeapp.android.listeners.OnListFragmentInteractionListener;
-import com.example.styczen.marcin.earthquakeapp.core.cos.Earthquake;
+import com.example.styczen.marcin.earthquakeapp.core.Earthquake;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +35,7 @@ public class EarthquakeRecyclerViewAdapter extends RecyclerView.Adapter<Earthqua
         public final View mView;
         public final ImageView mImage;
         public final TextView mName;
-        public final TextView mTime;
+        public final TextView mPlace;
         public final TextView mMagnitude;
         public Earthquake earthquake;
 
@@ -44,7 +44,7 @@ public class EarthquakeRecyclerViewAdapter extends RecyclerView.Adapter<Earthqua
             mView = view;
             mImage = (ImageView) view.findViewById(R.id.icon_iv) ;
             mName = (TextView) view.findViewById(R.id.title_tv);
-            mTime = (TextView) view.findViewById(R.id.subtitle_tv);
+            mPlace = (TextView) view.findViewById(R.id.subtitle_tv);
             mMagnitude = (TextView) view.findViewById(R.id.additional_info_tv);
         }
 
@@ -72,7 +72,7 @@ public class EarthquakeRecyclerViewAdapter extends RecyclerView.Adapter<Earthqua
         String title = holder.earthquake.getTitle();
         setImage(title, holder);
         holder.mName.setText(title);
-        holder.mTime.setText(holder.earthquake.getTime());
+        holder.mPlace.setText(holder.earthquake.getPlace());
         holder.mMagnitude.setText(String.valueOf(holder.earthquake.getMagnitude()));
 
         holder.mView.setOnClickListener(new View.OnClickListener() {

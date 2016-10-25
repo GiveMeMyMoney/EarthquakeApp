@@ -6,7 +6,7 @@ import android.content.Intent;
 
 import com.example.styczen.marcin.earthquakeapp.businessLogicLayer.webManager.WebEarthquakeManager;
 import com.example.styczen.marcin.earthquakeapp.businessLogicLayer.webManager.interfaces.IWebEarthquakeManager;
-import com.example.styczen.marcin.earthquakeapp.core.cos.Earthquake;
+import com.example.styczen.marcin.earthquakeapp.core.Earthquake;
 
 import java.util.ArrayList;
 import java.util.List;

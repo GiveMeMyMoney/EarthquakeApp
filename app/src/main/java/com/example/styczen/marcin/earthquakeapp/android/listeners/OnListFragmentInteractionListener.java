@@ -1,6 +1,6 @@
 package com.example.styczen.marcin.earthquakeapp.android.listeners;
 
-import com.example.styczen.marcin.earthquakeapp.core.cos.Earthquake;
+import com.example.styczen.marcin.earthquakeapp.core.Earthquake;
 
 /**
  * Created by Marcin on 2016-10-10.

@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.styczen.marcin.earthquakeapp.R;
-import com.example.styczen.marcin.earthquakeapp.core.cos.Earthquake;
+import com.example.styczen.marcin.earthquakeapp.core.Earthquake;
 import com.google.android.gms.plus.PlusOneButton;
 
 import mehdi.sakout.fancybuttons.FancyButton;

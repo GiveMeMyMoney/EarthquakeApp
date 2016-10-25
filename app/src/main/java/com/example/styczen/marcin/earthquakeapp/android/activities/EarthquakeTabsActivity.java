@@ -15,7 +15,7 @@ import com.example.styczen.marcin.earthquakeapp.android.fragments.AllEarthquakeF
 import com.example.styczen.marcin.earthquakeapp.android.listeners.OnListFragmentInteractionListener;
 import com.example.styczen.marcin.earthquakeapp.businessLogicLayer.dbManager.DbEarthquakeManager;
 import com.example.styczen.marcin.earthquakeapp.businessLogicLayer.dbManager.interfaces.IDbEarthquakeManager;
-import com.example.styczen.marcin.earthquakeapp.core.cos.Earthquake;
+import com.example.styczen.marcin.earthquakeapp.core.Earthquake;
 import com.example.styczen.marcin.earthquakeapp.database.DBAdapter;
 import com.example.styczen.marcin.earthquakeapp.exceptions.DataBaseException;
 import com.roughike.bottombar.BottomBar;

@@ -8,10 +8,10 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.example.styczen.marcin.earthquakeapp.core.cos.Earthquake;
+import com.example.styczen.marcin.earthquakeapp.core.Earthquake;
+import com.example.styczen.marcin.earthquakeapp.core.Geometry;
 import com.example.styczen.marcin.earthquakeapp.utils.AndroidUtils;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
-import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
@@ -60,10 +60,6 @@ public class DBAdapter {
     //endregion Construct
 
     private class DBHelper extends OrmLiteSqliteOpenHelper {
-
-        // DAO (Database Access Object)
-        private Dao<Earthquake, Integer> earthquakeDao = null;
-
         public DBHelper(final Context context, String path) {
             super(context, path, null, DATABASE_VERSION);
         }
@@ -78,6 +74,7 @@ public class DBAdapter {
         public void onCreate(SQLiteDatabase db, ConnectionSource connectionSource) {
             try {
                 Log.i(LOG_TAG, "createTable (onCreate)");
+                TableUtils.createTable(connectionSource, Geometry.class);
                 TableUtils.createTable(connectionSource, Earthquake.class);
             } catch (SQLException e) {
                 Log.e(LOG_TAG, "Can't create database (onCreate)", e);

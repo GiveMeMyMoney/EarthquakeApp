@@ -22,7 +22,7 @@ import com.example.styczen.marcin.earthquakeapp.android.receivers.EarthquakeDown
 import com.example.styczen.marcin.earthquakeapp.android.services.EarthquakeDownloadService;
 import com.example.styczen.marcin.earthquakeapp.businessLogicLayer.dbManager.DbEarthquakeManager;
 import com.example.styczen.marcin.earthquakeapp.businessLogicLayer.dbManager.interfaces.IDbEarthquakeManager;
-import com.example.styczen.marcin.earthquakeapp.core.cos.Earthquake;
+import com.example.styczen.marcin.earthquakeapp.core.Earthquake;
 import com.example.styczen.marcin.earthquakeapp.exceptions.DataBaseException;
 
 import java.util.ArrayList;
