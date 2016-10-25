@@ -50,12 +50,24 @@ class Earthquake implements Parcelable {
     @DatabaseField(columnName = EARTQUAKE_COL_TIME)
     private long time;
     @DatabaseField(foreign = true, columnName = EARTQUAKE_COL_GEOMETRY, foreignAutoRefresh = true)
-    private Geometry geometries;
+    private Geometry geometry;
 
     public Earthquake(String title, String place, Double magnitude) {
         this.title = title;
         this.place = place;
         this.magnitude = magnitude;
+    }
+
+    public Earthquake(String uniqueId, Double magnitude, String place, String urlDetail, String code, String type, String title, long time, Geometry geometry) {
+        this.uniqueId = uniqueId;
+        this.magnitude = magnitude;
+        this.place = place;
+        this.urlDetail = urlDetail;
+        this.code = code;
+        this.type = type;
+        this.title = title;
+        this.time = time;
+        this.geometry = geometry;
     }
 
     public boolean isValid() {
@@ -80,7 +92,7 @@ class Earthquake implements Parcelable {
         dest.writeString(this.type);
         dest.writeString(this.title);
         dest.writeLong(this.time);
-        dest.writeParcelable(this.geometries, flags);
+        dest.writeParcelable(this.geometry, flags);
     }
 
     protected Earthquake(Parcel in) {
@@ -93,7 +105,7 @@ class Earthquake implements Parcelable {
         this.type = in.readString();
         this.title = in.readString();
         this.time = in.readLong();
-        this.geometries = in.readParcelable(Geometry.class.getClassLoader());
+        this.geometry = in.readParcelable(Geometry.class.getClassLoader());
     }
 
     public static final Creator<Earthquake> CREATOR = new Creator<Earthquake>() {

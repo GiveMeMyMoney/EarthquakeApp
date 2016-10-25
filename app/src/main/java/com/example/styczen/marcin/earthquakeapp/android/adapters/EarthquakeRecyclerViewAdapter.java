@@ -1,7 +1,6 @@
 package com.example.styczen.marcin.earthquakeapp.android.adapters;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,7 +78,6 @@ public class EarthquakeRecyclerViewAdapter extends RecyclerView.Adapter<Earthqua
             @Override
             public void onClick(View v) {
                 if (null != mListener) {
-                    Log.e("Click", "lohohoho");
                     mListener.onListFragmentInteraction(holder.earthquake);
                 }
             }

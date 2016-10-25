@@ -22,7 +22,7 @@ public class EarthquakeWebProvider {
     private static final String FORMAT_TYPE = "geojson";
     private static final String STARTTIME_TXT = "&starttime=%s";
     private static final String ENDTIME_TXT = "&endtime=%s";
-    private static final String SERVICE_URL = "http://earthquake.usgs.gov/?format=%s";
+    private static final String SERVICE_URL = "http://earthquake.usgs.gov/";
 
     //region Construct
     private static EarthquakeWebProvider instance;
@@ -37,6 +37,8 @@ public class EarthquakeWebProvider {
         return instance;
     }
     //endregion Construct
+
+    //http://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2014-01-01&endtime=2014-01-02
 
     public interface RetroEarthquakesWithDate {
         /**

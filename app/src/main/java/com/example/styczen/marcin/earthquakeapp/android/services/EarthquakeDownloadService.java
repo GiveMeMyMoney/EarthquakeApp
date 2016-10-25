@@ -15,6 +15,7 @@ import java.util.List;
  * Created by Marcin on 2016-10-18.
  */
 
+//TODO javadoc
 public class EarthquakeDownloadService extends IntentService {
 
     private int result = Activity.RESULT_CANCELED;
@@ -42,41 +43,6 @@ public class EarthquakeDownloadService extends IntentService {
         }
         publishResult(earthquakeList, result);
     }
-
-    /*
-    private String doJob() {
-        //InputStream stream = null;
-        BufferedReader reader = null;
-
-        try {
-            URL url = new URL("http://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2014-01-01&endtime=2014-01-02");
-            //stream = url.openConnection().getInputStream();
-            //InputStreamReader reader = new InputStreamReader(stream);
-
-            reader = new BufferedReader(new InputStreamReader(url.openStream()));
-            StringBuffer buffer = new StringBuffer();
-            int read;
-            char[] chars = new char[1024];
-            while ((read = reader.read(chars)) != -1)
-                buffer.append(chars, 0, read);
-
-            // successfully finished
-            result = Activity.RESULT_OK;
-
-            return buffer.toString();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return "nic";
-    }*/
 
     private void publishResult(List<Earthquake> earthquakeList, int result) {
         Intent i = new Intent(NOTIFICATION);

@@ -38,7 +38,6 @@ public class EarthquakeTabsActivity extends AppCompatActivity implements OnListF
     //TODO robic pushe
     //TODO brzydki pasek u dołu
     //TODO paczki services, receivers...
-    //// TODO: 2016-10-18 koleczko ktore sie krenci :D - loader (ProgressBar)
 
     private AllEarthquakeFragment fragment;
     private List<Earthquake> earthquakeList;

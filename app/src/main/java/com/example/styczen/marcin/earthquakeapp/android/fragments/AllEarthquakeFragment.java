@@ -13,7 +13,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.styczen.marcin.earthquakeapp.R;
 import com.example.styczen.marcin.earthquakeapp.android.adapters.EarthquakeRecyclerViewAdapter;
@@ -70,7 +69,8 @@ public class AllEarthquakeFragment extends Fragment {
             earthquakeDownloadReceiver = new EarthquakeDownloadReceiver() {
                 @Override
                 protected void onReceiveSend(List<Earthquake> earthquakeList) {
-                    Toast.makeText(getContext(), earthquakeList.toString(), Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getContext(), earthquakeList.toString(), Toast.LENGTH_LONG).show();
+                    changeContentEarthquakeList(earthquakeList);
 
                     swipeRefreshLayout.setRefreshing(false);
                 }
