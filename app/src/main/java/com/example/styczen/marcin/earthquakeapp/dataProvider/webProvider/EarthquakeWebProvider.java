@@ -3,6 +3,10 @@ package com.example.styczen.marcin.earthquakeapp.dataProvider.webProvider;
 import com.j256.ormlite.logger.Logger;
 import com.j256.ormlite.logger.LoggerFactory;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Retrofit;
@@ -38,8 +42,16 @@ public class EarthquakeWebProvider {
     }
     //endregion Construct
 
-    //http://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2014-01-01&endtime=2014-01-02
+    public boolean hasInternetAccess() throws IOException {
+        HttpURLConnection urlc = (HttpURLConnection) (new URL("http://clients3.google.com/generate_204").openConnection());
+        urlc.setRequestProperty("User-Agent", "Android");
+        urlc.setRequestProperty("Connection", "close");
+        urlc.setConnectTimeout(1500);
+        urlc.connect();
+        return (urlc.getResponseCode() == 204 && urlc.getContentLength() == 0);
+    }
 
+    //http://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2014-01-01&endtime=2014-01-02
     public interface RetroEarthquakesWithDate {
         /**
          *  Download all eartquakes with match (starttime; endtime)

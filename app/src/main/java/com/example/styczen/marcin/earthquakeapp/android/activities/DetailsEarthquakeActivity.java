@@ -7,17 +7,21 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.styczen.marcin.earthquakeapp.R;
 import com.example.styczen.marcin.earthquakeapp.android.fragments.DetailsEarthquakeFragment;
+import com.example.styczen.marcin.earthquakeapp.businessLogicLayer.dbManager.DbEarthquakeManager;
+import com.example.styczen.marcin.earthquakeapp.businessLogicLayer.dbManager.interfaces.IDbEarthquakeManager;
 import com.example.styczen.marcin.earthquakeapp.core.Earthquake;
+import com.example.styczen.marcin.earthquakeapp.exceptions.DataBaseException;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -28,15 +32,31 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class DetailsEarthquakeActivity extends AppCompatActivity implements OnMapReadyCallback {
+    private static final String LOG_TAG = DetailsEarthquakeActivity.class.getSimpleName();
     public static String INTENT_EARTHQUAKE = DetailsEarthquakeActivity.class.getName() + ".earthquakeIntent";
+    private static int MAPS_ZOOM_SIZE = 3; // 1 = all map.
 
-    private static final LatLng KIEL = new LatLng(63.102, -151.6458); //(os Y, os X)
+    //region VIEW
+    private AppBarLayout mAppBarLayout;
+    private CollapsingToolbarLayout mCollapsingToolbarLayout;
+    private FloatingActionButton fab;
+    //endregion VIEW
+
     private GoogleMap mMap;
-
     private DetailsEarthquakeFragment fragment;
+    private Earthquake earthquake;
+    private IDbEarthquakeManager earthquakeManager;
 
-    Earthquake earthquake;
+    public DetailsEarthquakeActivity() {
+        try {
+            earthquakeManager = DbEarthquakeManager.getEarthquakeManager(this);
+        } catch (DataBaseException e) {
+            Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            Log.e(LOG_TAG, "Error: " + e.getMessage());
+        }
+    }
 
+    //TODO refactor
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,24 +76,20 @@ public class DetailsEarthquakeActivity extends AppCompatActivity implements OnMa
             ft.commit();
         }
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_favorites);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map_google);
         mapFragment.getMapAsync(this);
 
-        final CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
-        collapsingToolbarLayout.setTitleEnabled(false);
-        AppBarLayout mAppBarLayout = (AppBarLayout) findViewById(R.id.app_bar);
+        mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
+        mAppBarLayout = (AppBarLayout) findViewById(R.id.app_bar);
+        fab = (FloatingActionButton) findViewById(R.id.fab_favorites);
+        setViewBehavior();
 
-        //TODO refactor
-        //Drag on map
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    private void setViewBehavior() {
+        mCollapsingToolbarLayout.setTitleEnabled(false);
+        //Enable Drag on map
         CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) mAppBarLayout.getLayoutParams();
         AppBarLayout.Behavior behavior = new AppBarLayout.Behavior();
         behavior.setDragCallback(new AppBarLayout.Behavior.DragCallback() {
@@ -84,9 +100,7 @@ public class DetailsEarthquakeActivity extends AppCompatActivity implements OnMa
         });
         params.setBehavior(behavior);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        //Hide title when expanded
+        //Hide title and backArrow when expanded
         mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             boolean isShow = true;
             int scrollRange = -1;
@@ -107,6 +121,24 @@ public class DetailsEarthquakeActivity extends AppCompatActivity implements OnMa
                 }
             }
         });
+
+        //FAB
+        addEarthquakeToFavorite();
+    }
+
+    private void addEarthquakeToFavorite() {
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    earthquakeManager.insert(earthquake);
+                    Toast.makeText(DetailsEarthquakeActivity.this, "Now, it's your favorite!", Toast.LENGTH_SHORT).show();
+                } catch (DataBaseException e) {
+                    Toast.makeText(DetailsEarthquakeActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    Log.e(LOG_TAG, "Error: " + e.getMessage());
+                }
+            }
+        });
     }
 
     @Override
@@ -121,17 +153,15 @@ public class DetailsEarthquakeActivity extends AppCompatActivity implements OnMa
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        if (googleMap != null) {
-            mMap = googleMap; //earthquake.getLocalisation()
+        LatLng mapsLocalisation = new LatLng(earthquake.getGeometry().getCoordinatesMapY(), earthquake.getGeometry().getCoordinatesMapX());
+        if (googleMap != null && mapsLocalisation != null) {
+            mMap = googleMap;
             Marker earthquakePlace = mMap.addMarker(new MarkerOptions()
-                    .position(KIEL)
+                    .position(mapsLocalisation)
                     .title("Kiel"));
 
-            // Move the camera instantly to hamburg with a zoom of 15.
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(KIEL, 50));
-
-            // Zoom in, animating the camera.
-            //mMap.animateCamera(CameraUpdateFactory.zoomTo(12), 2000, null);
+            // Move the camera instantly to hamburg with a zoom of MAPS_ZOOM_SIZE.
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mapsLocalisation, MAPS_ZOOM_SIZE));
         }
     }
 

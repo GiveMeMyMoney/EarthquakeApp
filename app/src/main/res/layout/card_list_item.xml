@@ -38,7 +38,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
-                    android:maxLines="2"
+                    android:maxLines="1"
                     android:text="Tytuł"
                     android:textSize="14dp" />
 
@@ -47,6 +47,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
                     android:text="podtytuł"
                     android:textSize="10dp" />
 

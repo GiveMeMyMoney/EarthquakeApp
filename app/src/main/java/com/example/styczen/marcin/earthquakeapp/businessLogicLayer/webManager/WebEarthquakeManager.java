@@ -1,5 +1,8 @@
 package com.example.styczen.marcin.earthquakeapp.businessLogicLayer.webManager;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
 
 import com.example.styczen.marcin.earthquakeapp.businessLogicLayer.webManager.interfaces.IWebEarthquakeManager;
@@ -35,13 +38,29 @@ public class WebEarthquakeManager implements IWebEarthquakeManager {
         this.earthquakeWebProvider = webProvider;
     }
 
-    public static WebEarthquakeManager getEarthquakeWebProvider() {
+    public static WebEarthquakeManager getWebEarthquakeManager() {
         if (instance == null) {
             instance = new WebEarthquakeManager(EarthquakeWebProvider.getEarthquakeWebProvider());
         }
         return instance;
     }
     //endregion
+
+    private boolean isNetworkAvailable(Context context) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    @Override
+    public boolean hasInternetAccess(Context context) throws IOException {
+        if (isNetworkAvailable(context)) {
+            return earthquakeWebProvider.hasInternetAccess();
+        } else {
+            Log.d(LOG_TAG, "No network connection");
+            return false;
+        }
+    }
 
     //TODO wypchac errory wyzej
     @Override

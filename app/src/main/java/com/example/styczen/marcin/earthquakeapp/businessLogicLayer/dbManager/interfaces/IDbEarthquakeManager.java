@@ -27,5 +27,4 @@ public interface IDbEarthquakeManager {
      * @param earthquake - new earthquake when sb add
      */
     boolean insert(Earthquake earthquake) throws DataBaseException;
-
 }

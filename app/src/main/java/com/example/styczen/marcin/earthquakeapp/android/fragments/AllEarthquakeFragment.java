@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -13,9 +14,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.styczen.marcin.earthquakeapp.R;
 import com.example.styczen.marcin.earthquakeapp.android.adapters.EarthquakeRecyclerViewAdapter;
+import com.example.styczen.marcin.earthquakeapp.android.asyncTasks.InternetConnectionTask;
 import com.example.styczen.marcin.earthquakeapp.android.listeners.OnListFragmentInteractionListener;
 import com.example.styczen.marcin.earthquakeapp.android.receivers.EarthquakeDownloadReceiver;
 import com.example.styczen.marcin.earthquakeapp.android.services.EarthquakeDownloadService;
@@ -39,7 +42,7 @@ import static com.example.styczen.marcin.earthquakeapp.utils.Utils.checkListVali
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class AllEarthquakeFragment extends Fragment {
+public class AllEarthquakeFragment extends Fragment implements InternetConnectionTask.IInternetConnection {
     private static final String LOG_TAG = AllEarthquakeFragment.class.getSimpleName();
 
     private static final String ARG_EARTHQUAKE_LIST = "earthquake-list";
@@ -47,7 +50,7 @@ public class AllEarthquakeFragment extends Fragment {
     private EarthquakeRecyclerViewAdapter mAdapter;
     private OnListFragmentInteractionListener mListener;
 
-    private IDbEarthquakeManager earthquakeService;
+    private IDbEarthquakeManager earthquakeManager;
 
     private View messageContainer;
     private RecyclerView recyclerView;
@@ -74,11 +77,10 @@ public class AllEarthquakeFragment extends Fragment {
                     //Toast.makeText(getContext(), earthquakeList.toString(), Toast.LENGTH_LONG).show();
                     earthquakeList = earthquakeListFromAPI;
                     changeContentEarthquakeList(earthquakeList);
-
                     swipeRefreshLayout.setRefreshing(false);
                 }
             };
-            earthquakeService = DbEarthquakeManager.getEarthquakeService(getContext());
+            earthquakeManager = DbEarthquakeManager.getEarthquakeManager(getContext());
         } catch (DataBaseException e) {
             //TODO ErrorDialog
             e.printStackTrace();
@@ -119,7 +121,6 @@ public class AllEarthquakeFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_all_earthquake, container, false);
 
         messageContainer = rootView.findViewById(R.id.add_favorites_msg);
-        setMessageContainerVisibility();
 
         swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh_layout);
         setSwipeRefreshLayout();
@@ -145,25 +146,43 @@ public class AllEarthquakeFragment extends Fragment {
             @Override
             public void onRefresh() {
                 Log.d(LOG_TAG, "swipeRefreshLayout: onRefresh");
-                messageContainer.setVisibility(View.GONE);
-                getEarthquakesFromAPIByService();
-            }
-        });
-
-        //first time run
-        swipeRefreshLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                messageContainer.setVisibility(View.GONE);
-                swipeRefreshLayout.setRefreshing(true);
                 getEarthquakesFromAPIByService();
             }
         });
     }
 
-    private void getEarthquakesFromAPIByService() {
-        Intent i = new Intent(getContext(), EarthquakeDownloadService.class);
-        getContext().startService(i);
+    public void getEarthquakesFromAPIByService() {
+        swipeRefreshLayout.setRefreshing(true);
+        InternetConnectionTask internetConnectionTask = new InternetConnectionTask(getActivity());
+        internetConnectionTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    /**
+     * Get a result from InternetConnectionTask
+     * and start EarthquakeDownloadService.
+     *
+     * @param connection - true | false connection into net.
+     */
+    @Override
+    public void getInternetConnectionResult(boolean connection) {
+        if (connection) {
+            messageContainer.setVisibility(View.GONE);
+            Intent i = new Intent(getContext(), EarthquakeDownloadService.class);
+            //TODO przekazac aktywnosc do EarthquakeDownloadService i tam sprawdzac polaczenie (wywalic InternetConnectionTask)
+            getContext().startService(i);
+        } else {
+            swipeRefreshLayout.setRefreshing(false);
+            Toast.makeText(getContext(), "No network connection", Toast.LENGTH_SHORT).show();
+            setMessageContainerVisibility();
+        }
+    }
+
+    private void setMessageContainerVisibility() {
+        if (checkListValid(earthquakeList)) {
+            messageContainer.setVisibility(View.GONE);
+        } else {
+            messageContainer.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -192,13 +211,6 @@ public class AllEarthquakeFragment extends Fragment {
     }
 
     //endregion Construct
-    private void setMessageContainerVisibility() {
-        if (checkListValid(earthquakeList)) {
-            messageContainer.setVisibility(View.GONE);
-        } else {
-            messageContainer.setVisibility(View.VISIBLE);
-        }
-    }
 
     public void changeContentEarthquakeList(List<Earthquake> eList) {
         if (checkListValid(eList)) {

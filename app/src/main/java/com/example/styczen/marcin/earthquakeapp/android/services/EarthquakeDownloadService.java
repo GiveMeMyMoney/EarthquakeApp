@@ -29,7 +29,7 @@ public class EarthquakeDownloadService extends IntentService {
 
     public EarthquakeDownloadService() {
         super("EarthquakeDownloadService");
-        webEarthquakeManager = WebEarthquakeManager.getEarthquakeWebProvider();
+        webEarthquakeManager = WebEarthquakeManager.getWebEarthquakeManager();
 
     }
 

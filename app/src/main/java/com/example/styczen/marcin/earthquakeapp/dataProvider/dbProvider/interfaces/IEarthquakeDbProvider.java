@@ -12,18 +12,21 @@ import java.util.List;
 public interface IEarthquakeDbProvider {
     /**
      * Select all favorites earthquakes
+     *
      * @return List<Earthquake>
      */
     List<Earthquake> selectAll() throws DataBaseException;
 
     /**
      * Delete one earthquake from favorites
+     *
      * @return List<Earthquake>
      */
     int deleteById(int id) throws DataBaseException;
 
     /**
      * Insert new earthquake into favorites
+     *
      * @param earthquake - new earthquake when sb add
      */
     boolean insertOrUpdate(Earthquake earthquake) throws DataBaseException;

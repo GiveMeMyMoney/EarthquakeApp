@@ -9,10 +9,10 @@
         id="@+id/tab_contributors"
         icon="@drawable/ic_favorite"
         title="Contributors"
-        barColorWhenSelected="#5D4037" />
+        barColorWhenSelected="#4052b5" />
     <tab
         id="@+id/tab_favorites"
         icon="@drawable/ic_favorite"
         title="Favorites"
-        barColorWhenSelected="#5D4037" />
+        barColorWhenSelected="#e71c26" />
 </tabs>

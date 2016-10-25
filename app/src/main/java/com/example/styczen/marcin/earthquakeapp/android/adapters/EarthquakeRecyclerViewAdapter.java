@@ -42,8 +42,8 @@ public class EarthquakeRecyclerViewAdapter extends RecyclerView.Adapter<Earthqua
             super(view);
             mView = view;
             mImage = (ImageView) view.findViewById(R.id.icon_iv) ;
-            mName = (TextView) view.findViewById(R.id.title_tv);
-            mPlace = (TextView) view.findViewById(R.id.subtitle_tv);
+            mPlace = (TextView) view.findViewById(R.id.title_tv);
+            mName = (TextView) view.findViewById(R.id.subtitle_tv);
             mMagnitude = (TextView) view.findViewById(R.id.additional_info_tv);
         }
 
@@ -68,11 +68,11 @@ public class EarthquakeRecyclerViewAdapter extends RecyclerView.Adapter<Earthqua
     public void onBindViewHolder(final ViewHolder holder, int position) {
         //TODO ViewHolder albo cos
         holder.earthquake = earthquakeList.get(position);
-        String title = holder.earthquake.getTitle();
-        setImage(title, holder);
-        holder.mName.setText(title);
+        String magnitude = String.valueOf(holder.earthquake.getMagnitude());
+        setImage(magnitude, holder);
         holder.mPlace.setText(holder.earthquake.getPlace());
-        holder.mMagnitude.setText(String.valueOf(holder.earthquake.getMagnitude()));
+        holder.mName.setText(holder.earthquake.getTitle());
+        holder.mMagnitude.setText(magnitude);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -15,6 +15,7 @@ import java.util.List;
  */
 
 public class DbEarthquakeManager implements IDbEarthquakeManager {
+    private static final String LOG_TAG = DbEarthquakeManager.class.getSimpleName();
 
     private IEarthquakeDbProvider dataProvider;
 
@@ -25,11 +26,11 @@ public class DbEarthquakeManager implements IDbEarthquakeManager {
         this.dataProvider = dataProvider;
     }
 
-    public static IDbEarthquakeManager getEarthquakeService(Context context) throws DataBaseException {
-        return getEarthquakeService(EartquakeDbProvider.getEartquakeDbProvider(context));
+    public static IDbEarthquakeManager getEarthquakeManager(Context context) throws DataBaseException {
+        return getEarthquakeManager(EartquakeDbProvider.getEartquakeDbProvider(context));
     }
 
-    private static IDbEarthquakeManager getEarthquakeService(IEarthquakeDbProvider dataProvider) {
+    private static IDbEarthquakeManager getEarthquakeManager(IEarthquakeDbProvider dataProvider) {
         if (earthquakeService == null) {
             earthquakeService = new DbEarthquakeManager(dataProvider);
         }

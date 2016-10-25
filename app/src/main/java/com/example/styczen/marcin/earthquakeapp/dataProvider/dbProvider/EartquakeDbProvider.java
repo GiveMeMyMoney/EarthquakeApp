@@ -3,6 +3,7 @@ package com.example.styczen.marcin.earthquakeapp.dataProvider.dbProvider;
 import android.content.Context;
 
 import com.example.styczen.marcin.earthquakeapp.core.Earthquake;
+import com.example.styczen.marcin.earthquakeapp.core.Geometry;
 import com.example.styczen.marcin.earthquakeapp.dataProvider.dbProvider.interfaces.IEarthquakeDbProvider;
 import com.example.styczen.marcin.earthquakeapp.database.DBAdapter;
 import com.example.styczen.marcin.earthquakeapp.database.DaoContainer;
@@ -22,6 +23,7 @@ public class EartquakeDbProvider implements IEarthquakeDbProvider {
 
     private DBAdapter dbAdapter;
     private Dao<Earthquake, Integer> earthquakeDao;
+    private Dao<Geometry, Integer> geometryDao;
 
     //Construct
     private static EartquakeDbProvider instance;
@@ -31,6 +33,7 @@ public class EartquakeDbProvider implements IEarthquakeDbProvider {
             dbAdapter = DBAdapter.getDbAdapter(context);
             DaoContainer daoContainer = dbAdapter.getDbAdapter(context).getDaoContainer();
             earthquakeDao = daoContainer.getEarthquakeDAO();
+            geometryDao = daoContainer.getGeometryDAO();
         } catch (SQLException e) {
             throw new DataBaseException(String.format("Eartquake Provider is inaccessible. %s", e.getMessage()));
         }
@@ -71,12 +74,11 @@ public class EartquakeDbProvider implements IEarthquakeDbProvider {
     /**
      * Delete one earthquake from favorites
      *
-     * @return List<Earthquake>
+     * @return deletedRows.
      */
     @Override
     public int deleteById(int id) throws DataBaseException {
         int deletedRows = 0;
-
         try {
             deletedRows = earthquakeDao.deleteById(id);
         } catch (Exception e) {
@@ -87,13 +89,14 @@ public class EartquakeDbProvider implements IEarthquakeDbProvider {
     }
 
     /**
-     * Insert new earthquake into favorites
+     * Insert new earthquake into db
      *
      * @param earthquake - new earthquake when sb add
      */
     @Override
     public boolean insertOrUpdate(Earthquake earthquake) throws DataBaseException {
         try {
+            geometryDao.createOrUpdate(earthquake.getGeometry());
             earthquakeDao.createOrUpdate(earthquake);
         } catch (Exception e) {
             throwError(String.format("Eartquake Provider insertOrUpdate(). %s", e.getMessage()));

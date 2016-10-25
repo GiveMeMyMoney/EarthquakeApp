@@ -49,7 +49,7 @@ public class EarthquakeTabsActivity extends AppCompatActivity implements OnListF
     public EarthquakeTabsActivity() {
         earthquakeList = new ArrayList<>();
         try {
-            earthquakeManager = DbEarthquakeManager.getEarthquakeService(this);
+            earthquakeManager = DbEarthquakeManager.getEarthquakeManager(this);
             //earthquakeDownloadReceiver = new EarthquakeDownloadReceiver();
         } catch (DataBaseException e) {
             //TODO ErrorDialog
@@ -97,18 +97,14 @@ public class EarthquakeTabsActivity extends AppCompatActivity implements OnListF
             @Override
             public void onTabSelected(@IdRes int tabId) {
                 if (tabId == R.id.tab_earthquakes) {
-                    //prepareEarthquakeData1();
-                    //
-                    //fragment.changeContentEarthquakeList(earthquakeList);
+                    fragment.getEarthquakesFromAPIByService();
                 }
                 if (tabId == R.id.tab_contributors) {
-                    //prepareEarthquakeData2();
-                    //
-                    //fragment.changeContentEarthquakeList(earthquakeList);
+                    fragment.getEarthquakesFromAPIByService(); //TODO
                 }
                 if (tabId == R.id.tab_favorites) {
+                    //TODO problem leci ladowanie listy z API gdy sie szybko przekliknie
                     getFavoriteEarthquakesFromDB();
-                    //
                     fragment.changeContentEarthquakeList(earthquakeList);
                 }
             }
