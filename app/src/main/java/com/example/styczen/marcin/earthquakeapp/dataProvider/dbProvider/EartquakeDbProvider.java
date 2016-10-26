@@ -51,6 +51,18 @@ public class EartquakeDbProvider implements IEarthquakeDbProvider {
         throw new DataBaseException(message);
     }
 
+    @Override
+    public Earthquake selectById(int id) throws DataBaseException {
+        Earthquake earthquake = null;
+        try {
+            QueryBuilder<Earthquake, Integer> qb = earthquakeDao.queryBuilder();
+            earthquake = qb.where().eq("_id", id).queryForFirst();
+        } catch (Exception e) {
+            throwError(String.format("Eartquake Provider selectAll(). %s", e.getMessage()));
+        }
+        return earthquake;
+    }
+
     /**
      * Select all favorites earthquakes
      *
@@ -75,6 +87,7 @@ public class EartquakeDbProvider implements IEarthquakeDbProvider {
      * Delete one earthquake from favorites
      *
      * @return deletedRows.
+     * @param id
      */
     @Override
     public int deleteById(int id) throws DataBaseException {

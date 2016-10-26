@@ -45,6 +45,15 @@ class Geometry implements Parcelable {
         this.depth = depth;
     }
 
+    @Override
+    public String toString() {
+        return  type + " (" +
+                "Y= " + coordinatesMapY +
+                ", X= " + coordinatesMapX +
+                ", depth= " + depth +
+                ")";
+    }
+
     //PARCEL
     protected Geometry(Parcel in) {
         this.id = in.readLong();

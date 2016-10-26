@@ -11,6 +11,13 @@ import java.util.List;
 
 public interface IDbEarthquakeManager {
     /**
+     * Select by id from DB
+     * @param id - Earthquake ID
+     * @return Earthquake
+     */
+    Earthquake selectById(int id) throws DataBaseException;
+
+    /**
      * Select all favorites earthquakes
      * @return List<Earthquake>
      */
@@ -20,7 +27,7 @@ public interface IDbEarthquakeManager {
      * Delete one earthquake from favorites
      * @return List<Earthquake>
      */
-    int deleteById(int id) throws DataBaseException;
+    long deleteById(int id) throws DataBaseException;
 
     /**
      * Insert new earthquake into favorites

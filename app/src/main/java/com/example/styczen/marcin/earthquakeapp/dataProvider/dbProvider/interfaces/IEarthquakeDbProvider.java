@@ -21,6 +21,7 @@ public interface IEarthquakeDbProvider {
      * Delete one earthquake from favorites
      *
      * @return List<Earthquake>
+     * @param id
      */
     int deleteById(int id) throws DataBaseException;
 
@@ -30,4 +31,11 @@ public interface IEarthquakeDbProvider {
      * @param earthquake - new earthquake when sb add
      */
     boolean insertOrUpdate(Earthquake earthquake) throws DataBaseException;
+
+    /**
+     * Select earthquake by id from db
+     * @param id - earthquake local id
+     * @return Earthquake
+     */
+    Earthquake selectById(int id) throws DataBaseException;
 }

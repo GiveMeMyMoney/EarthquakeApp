@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.styczen.marcin.earthquakeapp.R;
@@ -76,6 +77,19 @@ public class DetailsEarthquakeFragment extends Fragment implements View.OnClickL
                 seeMoreDetailsBtnCLick();
             }
         });
+
+        TextView geometryTV = (TextView) view.findViewById(R.id.geometry_tv);
+        geometryTV.setText(earthquake.getGeometry().toString());
+        TextView typeTV = (TextView) view.findViewById(R.id.type_tv);
+        typeTV.setText(earthquake.getType());
+        TextView titleTV = (TextView) view.findViewById(R.id.title_tv);
+        titleTV.setText(earthquake.getTitle());
+        TextView placeTV = (TextView) view.findViewById(R.id.place_tv);
+        placeTV.setText(earthquake.getPlace());
+        TextView codeTV = (TextView) view.findViewById(R.id.code_tv);
+        codeTV.setText(earthquake.getCode());
+        TextView magnitudeTV = (TextView) view.findViewById(R.id.magnitude_tv);
+        magnitudeTV.setText(String.valueOf(earthquake.getMagnitude()) + Earthquake.MAGNITUDE_UNIT);
 
         return view;
     }

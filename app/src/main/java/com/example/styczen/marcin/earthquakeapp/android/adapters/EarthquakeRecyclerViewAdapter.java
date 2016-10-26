@@ -72,7 +72,7 @@ public class EarthquakeRecyclerViewAdapter extends RecyclerView.Adapter<Earthqua
         setImage(magnitude, holder);
         holder.mPlace.setText(holder.earthquake.getPlace());
         holder.mName.setText(holder.earthquake.getTitle());
-        holder.mMagnitude.setText(magnitude);
+        holder.mMagnitude.setText(magnitude + Earthquake.MAGNITUDE_UNIT);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override

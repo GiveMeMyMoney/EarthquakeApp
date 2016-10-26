@@ -37,6 +37,11 @@ public class DbEarthquakeManager implements IDbEarthquakeManager {
         return earthquakeService;
     }
     //endregion Construct
+    @Override
+    public Earthquake selectById(int id) throws DataBaseException {
+        return id > 0 ? dataProvider.selectById(id) : null;
+    }
+
 
     @Override
     public List<Earthquake> selectAll() throws DataBaseException {
@@ -44,7 +49,7 @@ public class DbEarthquakeManager implements IDbEarthquakeManager {
     }
 
     @Override
-    public int deleteById(int id) throws DataBaseException {
+    public long deleteById(int id) throws DataBaseException {
         return id > 0 ? dataProvider.deleteById(id) : id;
     }
 

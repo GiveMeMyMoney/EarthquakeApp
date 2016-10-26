@@ -23,4 +23,19 @@
         <item name="android:layout_marginBottom">10dp</item>
     </style>
 
+    <!--header for CARD VIEW-->
+    <style name="gm_card_header">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
+        <item name="android:layout_marginBottom">5dp</item>
+        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:layout_alignParentTop">true</item>
+    </style>
+
 </resources>

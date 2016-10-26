@@ -31,6 +31,8 @@ class Earthquake implements Parcelable {
     public static final String EARTQUAKE_COL_TIME = "eq_time";
     public static final String EARTQUAKE_COL_GEOMETRY = "eq_geometry";
 
+    public static final String MAGNITUDE_UNIT = "ml";
+
     @DatabaseField(columnName = "_id", generatedId = true)
     private long id;
     @DatabaseField(columnName = EARTQUAKE_COL_ID)

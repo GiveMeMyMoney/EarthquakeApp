@@ -48,7 +48,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_margin="@dimen/fab_margin"
-        app:fab_icon="@drawable/ic_favorite" />
+        app:fab_colorNormal="#FF3F51B5"
+        app:fab_colorPressed="#3f68b5" />
 
     <!--<android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

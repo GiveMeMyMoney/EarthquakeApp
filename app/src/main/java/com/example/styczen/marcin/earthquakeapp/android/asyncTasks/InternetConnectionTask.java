@@ -43,6 +43,10 @@ public class InternetConnectionTask extends AsyncTask<Void, Void, Boolean> {
             Log.e(LOG_TAG, "Error checking internet connection", e);
             e.printStackTrace();
             return false;
+        } catch (Exception e) {
+            Toast.makeText(mActivity, "Error checking internet connection: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            Log.e(LOG_TAG, "Error checking internet connection", e);
+            return false;
         }
     }
 

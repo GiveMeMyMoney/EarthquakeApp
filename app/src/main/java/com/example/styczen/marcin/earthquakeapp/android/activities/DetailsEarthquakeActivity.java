@@ -123,22 +123,39 @@ public class DetailsEarthquakeActivity extends AppCompatActivity implements OnMa
         });
 
         //FAB
-        addEarthquakeToFavorite();
+        addRemoveFavoriteEarthquake();
     }
 
-    private void addEarthquakeToFavorite() {
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try {
-                    earthquakeManager.insert(earthquake);
-                    Toast.makeText(DetailsEarthquakeActivity.this, "Now, it's your favorite!", Toast.LENGTH_SHORT).show();
-                } catch (DataBaseException e) {
-                    Toast.makeText(DetailsEarthquakeActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                    Log.e(LOG_TAG, "Error: " + e.getMessage());
+    private void addRemoveFavoriteEarthquake() {
+        try {
+            boolean isFavorite = earthquakeManager.selectById((int) earthquake.getId()) != null;
+            int imageFavoriteId = isFavorite ? R.drawable.ic_favorite : R.drawable.ic_favorite_border;
+            fab.setImageResource(imageFavoriteId);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        boolean isFavorite = earthquakeManager.selectById((int) earthquake.getId()) != null;
+                        if (isFavorite) {
+                            earthquakeManager.deleteById((int) earthquake.getId());
+                            fab.setImageResource(R.drawable.ic_favorite_border);
+                            Toast.makeText(DetailsEarthquakeActivity.this, "Removed from favorites", Toast.LENGTH_SHORT).show();
+                        } else {
+                            earthquakeManager.insert(earthquake);
+                            fab.setImageResource(R.drawable.ic_favorite);
+                            Toast.makeText(DetailsEarthquakeActivity.this, "Now, it's your favorite!", Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (DataBaseException e) {
+                        e.printStackTrace();
+                    }
+
                 }
-            }
-        });
+
+            });
+        } catch (DataBaseException e) {
+            Toast.makeText(DetailsEarthquakeActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            Log.e(LOG_TAG, "Error: " + e.getMessage());
+        }
     }
 
     @Override
